@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASD 工作室 v1.0（初版）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0C0E;
+    --panel:#15181B;
+    --panel-alt:#1C2023;
+    --border:#2B3034;
+    --border-strong:#3E454A;
+    --ink:#ECEFF1;
+    --muted:#8B93A0;
+    --console-bg:#000000;
+    --console-line:#39FF6B;
+    --console-dim:#55605A;
+    --status-ok:#39FF6B;
+    --status-progress:#FFD166;
+    --status-error:#FF5F56;
+    --accent:#39FF6B;
+    --accent-ink:#07130A;
+    --radius:10px;
+    --radius-pill:999px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Noto Sans TC', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  /* ---- Title bar (signature element: mimics a flashing-tool app window) ---- */
+  .titlebar{
+    position:sticky; top:0; z-index:50;
+    background:#101315;
+    border-bottom:1px solid var(--border-strong);
+    display:flex; align-items:center; gap:10px;
+    padding:8px 14px;
+  }
+  .dots{ display:flex; gap:6px; }
+  .dot{ width:10px; height:10px; border-radius:50%; background:#33393D; border:1px solid #454C51; }
+  .titlebar .app-name{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px; color:var(--muted); margin-left:4px;
+  }
+  .conn{
+    margin-left:auto; display:flex; align-items:center; gap:6px;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--status-ok);
+  }
+  .conn-dot{ width:8px; height:8px; border-radius:50%; background:var(--status-ok); box-shadow:0 0 0 3px rgba(46,125,70,0.15); }
+
+  .quicknav{
+    display:flex; gap:2px; overflow-x:auto; padding:0 10px;
+    background:#101315; border-bottom:1px solid var(--border);
+  }
+  .quicknav a{
+    white-space:nowrap; font-size:13px; color:var(--muted); text-decoration:none;
+    padding:9px 12px; border-right:1px solid var(--border);
+  }
+  .quicknav a:hover{ color:var(--accent); background:var(--panel-alt); }
+  .quicknav a:active, .quicknav a.active{
+    color:var(--accent-ink); background:var(--accent);
+    box-shadow:0 0 0 3px rgba(57,255,107,0.25), 0 0 16px rgba(57,255,107,0.55);
+  }
+
+  .wrap{ max-width:880px; margin:0 auto; padding:0 16px; }
+
+  /* ---- Panel pattern ---- */
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+    margin-top:18px;
+    border-radius:var(--radius);
+  }
+  .panel-head{
+    display:flex; align-items:center; gap:8px;
+    padding:9px 14px;
+    background:var(--panel-alt);
+    border-bottom:1px solid var(--border);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; letter-spacing:.06em; color:var(--muted);
+    text-transform:uppercase;
+  }
+  .panel-body{ padding:22px; }
+
+  /* ---- Hero ---- */
+  .hero{ padding:40px 0 8px; position:relative; overflow:visible; }
+  .hero > *{ position:relative; z-index:1; }
+  .hero-logo{
+    position:absolute; top:-130px; right:-180px; width:680px; max-width:none;
+    opacity:0.5; z-index:0; pointer-events:none; user-select:none;
+    filter:drop-shadow(0 40px 70px rgba(0,0,0,0.6));
+  }
+  @media (max-width:680px){
+    .hero-logo{ width:380px; top:-60px; right:-110px; opacity:0.5; }
+  }
+  .hero .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--accent);
+    letter-spacing:.08em; margin-bottom:10px;
+  }
+  .hero h1{
+    font-size:clamp(26px,4vw,36px); line-height:1.35; margin:0 0 14px;
+    font-weight:900;
+  }
+  .hero p{ color:var(--muted); font-size:15px; line-height:1.8; max-width:56ch; margin:0 0 20px; }
+  .cta-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:8px; }
+  .btn{
+    font-family:'Noto Sans TC', sans-serif; font-size:14px; font-weight:500;
+    padding:11px 20px; border-radius:var(--radius-pill); border:1px solid var(--border-strong);
+    background:var(--panel-alt); color:var(--ink); text-decoration:none; cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px;
+    transition:background .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+  }
+  .btn:hover{ background:#24292D; border-color:var(--accent); }
+  .btn:active{
+    background:#2A3B2E; border-color:var(--accent); transform:scale(0.97);
+    box-shadow:0 0 0 4px rgba(57,255,107,0.18), 0 0 22px rgba(57,255,107,0.5);
+  }
+  .btn.primary{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:700; }
+  .btn.primary:hover{ background:#2FE85D; }
+  .btn.primary:active{
+    background:#5CFF8C;
+    box-shadow:0 0 0 4px rgba(57,255,107,0.22), 0 0 26px rgba(57,255,107,0.65);
+  }
+  .btn:focus-visible, a:focus-visible, input:focus-visible{
+    outline:2px solid var(--accent); outline-offset:2px;
+  }
+
+  /* ---- Process stepper (real sequence -> numbering is meaningful) ---- */
+  .steps{ list-style:none; margin:0; padding:0; counter-reset:step; }
+  .step{
+    counter-increment:step;
+    display:flex; gap:14px; padding:14px 0;
+    border-bottom:1px dashed var(--border);
+  }
+  .step:last-child{ border-bottom:none; }
+  .step::before{
+    content:counter(step,decimal-leading-zero);
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--accent);
+    background:var(--panel-alt); border:1px solid var(--border);
+    width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .step h3{ margin:0 0 4px; font-size:15px; }
+  .step p{ margin:0; color:var(--muted); font-size:13.5px; line-height:1.6; }
+
+  /* ---- Lookup / console ---- */
+  .lookup-row{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .lookup-row input{
+    flex:1; min-width:200px;
+    font-family:'IBM Plex Mono', monospace; font-size:14px;
+    padding:10px 12px; border:1px solid var(--border-strong); border-radius:var(--radius);
+    background:var(--panel-alt); color:var(--ink);
+  }
+  .lookup-row input::placeholder{ color:var(--muted); }
+  .lookup-row button{
+    font-family:'Noto Sans TC', sans-serif; font-size:14px; font-weight:500;
+    padding:11px 20px; border-radius:var(--radius-pill); border:1px solid var(--border-strong);
+    background:var(--panel-alt); color:var(--ink); cursor:pointer;
+    transition:background .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+  }
+  .lookup-row button:hover{ border-color:var(--accent); color:var(--accent); }
+  .lookup-row button:active{
+    background:#2A3B2E; border-color:var(--accent); color:var(--accent); transform:scale(0.97);
+    box-shadow:0 0 0 4px rgba(57,255,107,0.18), 0 0 22px rgba(57,255,107,0.5);
+  }
+  .lookup-row button:disabled{ opacity:0.5; cursor:not-allowed; }
+  .console{
+    background:var(--console-bg); border-radius:var(--radius);
+    padding:16px; min-height:150px;
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; line-height:1.9;
+    color:var(--console-line); overflow-x:auto;
+  }
+  .console .dim{ color:var(--console-dim); }
+  .console .warn{ color:#E0B24E; }
+  .console .fail{ color:#E36B5C; }
+  .demo-note{ font-size:12px; color:var(--muted); margin-top:10px; }
+
+  /* ---- Tools grid ---- */
+  .tools-grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px;
+  }
+  .tool-card{
+    border:1px solid var(--border); border-radius:var(--radius); padding:14px;
+    background:var(--panel-alt);
+  }
+  .tool-card .tag{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    color:var(--accent); border:1px solid var(--accent); border-radius:20px;
+    padding:2px 8px; margin-bottom:8px;
+  }
+  .tool-card h4{ margin:0 0 6px; font-size:14.5px; }
+  .tool-card p{ margin:0; font-size:12.5px; color:var(--muted); line-height:1.6; }
+
+  /* ---- FAQ accordion ---- */
+  .faq-item{ border-bottom:1px solid var(--border); }
+  .faq-item:last-child{ border-bottom:none; }
+  .faq-q{
+    width:100%; text-align:left; background:none; border:none; cursor:pointer;
+    padding:14px 10px; font-size:14.5px; font-weight:500; color:var(--ink);
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    font-family:'Noto Sans TC', sans-serif; border-radius:var(--radius);
+    transition:background .15s ease, box-shadow .15s ease;
+  }
+  .faq-q:hover{ background:var(--panel-alt); }
+  .faq-q .plus{ font-family:'IBM Plex Mono', monospace; color:var(--accent); font-size:16px; flex-shrink:0; transition:transform .2s ease; }
+  .faq-a{ max-height:0; overflow:hidden; transition:max-height .25s ease; }
+  .faq-a p{ margin:0 0 14px; font-size:13.5px; color:var(--muted); line-height:1.8; }
+  .faq-item.open .faq-q{
+    background:rgba(57,255,107,0.08);
+    box-shadow:0 0 0 1px rgba(57,255,107,0.3), 0 0 18px rgba(57,255,107,0.25);
+  }
+  .faq-item.open .faq-a{ max-height:240px; }
+  .faq-item.open .plus{ transform:rotate(45deg); }
+
+  /* ---- Terms ---- */
+  .terms-box{
+    background:var(--panel-alt); border:1px solid var(--border); border-radius:var(--radius);
+    padding:16px; font-size:13px; color:var(--muted); line-height:1.9;
+  }
+  .terms-box strong{ color:var(--ink); }
+  .terms-group{ margin-bottom:18px; }
+  .terms-group:last-child{ margin-bottom:0; }
+  .terms-group-title{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--ink);
+    font-weight:600; margin-bottom:8px; display:flex; align-items:center; gap:6px;
+  }
+  .terms-list{ margin:0; padding-left:20px; }
+  .terms-list li{ margin-bottom:6px; }
+  .terms-list li:last-child{ margin-bottom:0; }
+
+  /* ---- Contact ---- */
+  .contact-grid{ display:flex; gap:12px; flex-wrap:wrap; }
+  .contact-card{
+    flex:1; min-width:180px; border:1px solid var(--border); border-radius:var(--radius);
+    padding:16px; text-align:center; background:var(--panel-alt);
+  }
+  .contact-card .label{ font-size:13px; color:var(--muted); margin-bottom:8px; }
+
+  footer{
+    text-align:center; color:var(--muted); font-size:12px;
+    padding:30px 16px 50px; font-family:'IBM Plex Mono', monospace;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .faq-a{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="titlebar">
+    <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+    <span class="app-name">ASD 工作室 — v1.0（初版 Demo）</span>
+    <div class="conn"><span class="conn-dot"></span>連線正常</div>
+  </div>
+  <nav class="quicknav">
+    <a href="#process">服務流程</a>
+    <a href="#lookup">進度查詢</a>
+    <a href="#tools">安裝套件</a>
+    <a href="#faq">常見問題</a>
+    <a href="#terms">服務條款</a>
+    <a href="#contact">聯絡預約</a>
+  </nav>
+
+  <div class="wrap">
+
+    <section class="hero">
+      <img class="hero-logo" src="logo.png" alt="ASD 工作室 Logo">
+      <div class="eyebrow">ASD 工作室 — ANDROID 刷機 / ROOT 售後支援</div>
+      <h1>手機解鎖、Root、常用工具安裝服務。<br>流程公開透明，買家隨時能查進度、找答案。</h1>
+      <p>提供 Android 手機解鎖、Root 與常用工具安裝，下方可以先了解完整服務流程與安裝項目。已經是買家的話，可以直接查詢訂單進度或翻閱常見問題，找不到答案再預約聯絡。</p>
+      <div class="cta-row">
+        <a href="#process" class="btn primary">了解服務流程</a>
+        <a href="#lookup" class="btn">查詢訂單進度</a>
+        <a href="#contact" class="btn">預約 / 聯絡</a>
+      </div>
+    </section>
+
+    <section id="process" class="panel">
+      <div class="panel-head">PROCESS — 服務流程（依實際作業順序）</div>
+      <div class="panel-body">
+        <ul class="steps">
+          <li class="step"><div><h3>收件確認</h3><p>拍照記錄手機外觀，確認目前系統版本，作為前後對照依據。</p></div></li>
+          <li class="step"><div><h3>告知完工時間</h3><p>確認機況後，會告知確切完工時間，避免反覆詢問進度。</p></div></li>
+          <li class="step"><div><h3>解鎖 Bootloader</h3><p>開始刷機第一步，此步驟會清除機身所有資料。</p></div></li>
+          <li class="step"><div><h3>安裝 Root 主程式</h3><p>依機型安裝對應的 Root 框架。</p></div></li>
+          <li class="step"><div><h3>安裝隱藏套件（約 5–7 項）</h3><p>避免銀行、薪資轉帳等 App 偵測到裝置已 Root 而無法使用。</p></div></li>
+          <li class="step"><div><h3>功能測試</h3><p>測試裝置可正常使用，依需求提供完工照片或影片。</p></div></li>
+          <li class="step"><div><h3>交付結案</h3><p>確認收款後面交或回寄，完成交易。</p></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="lookup" class="panel">
+      <div class="panel-head">STATUS INQUIRY — 進度查詢</div>
+      <div class="panel-body">
+        <div class="lookup-row">
+          <input id="orderNoInput" type="text" placeholder="輸入訂單編號，例如 A0012" autocomplete="off">
+          <button id="orderNoBtn" onclick="lookupOrder()">查詢進度</button>
+        </div>
+        <div id="lookupConsole" class="console">
+          <span class="dim">// 輸入訂單編號後按「查詢進度」，查詢完全在本頁進行，不會另外通知工作室</span>
+        </div>
+        <p class="demo-note">＊訂單編號請於下單確認後由工作室提供。若查無結果或狀態顯示異常，請透過下方 Threads 聯絡確認。</p>
+      </div>
+    </section>
+
+    <section id="tools" class="panel">
+      <div class="panel-head">INSTALLED PACKAGES — 本次安裝套件</div>
+      <div class="panel-body">
+        <div class="tools-grid">
+          <div class="tool-card"><span class="tag">ROOT 框架</span><h4>KernelSU</h4><p>提供裝置 Root 權限的核心框架。</p></div>
+          <div class="tool-card"><span class="tag">系統模組</span><h4>LSPosed</h4><p>執行常用系統層級模組。</p></div>
+          <div class="tool-card"><span class="tag">隱藏環境</span><h4>Zygisk</h4><p>隱藏 Root 狀態，降低被 App 偵測的機率。</p></div>
+          <div class="tool-card"><span class="tag">隱藏環境</span><h4>Play Integrity Fix</h4><p>修復裝置完整性檢測，改善銀行等 App 相容性。</p></div>
+          <div class="tool-card"><span class="tag">隱藏環境</span><h4>HMA-OSS</h4><p>協助偽裝機型資訊，降低偵測風險。</p></div>
+          <div class="tool-card"><span class="tag">維護工具</span><h4>TEESimulator-RS</h4><p>模擬金鑰認證環境，維持長期使用穩定度。</p></div>
+          <div class="tool-card" style="border-style:dashed;"><span class="tag">依需求</span><h4>其他客戶指定軟體</h4><p>視買家個別需求另行安裝，項目與說明可依實際情況調整。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="panel">
+      <div class="panel-head">FAQ — 常見問題自助排除</div>
+      <div class="panel-body">
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">為什麼銀行、薪資轉帳 App 顯示「裝置不安全」？<span class="plus">＋</span></button>
+            <div class="faq-a"><p>多數金融類 App 會偵測裝置是否 Root。交機時已安裝隱藏套件因應，若交付後仍出現此訊息，通常是 App 更新了偵測機制，可先重開機再試一次，仍無效再預約回報。</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">系統自動更新後，Root 不見了怎麼辦？<span class="plus">＋</span></button>
+            <div class="faq-a"><p>系統 OTA 更新通常會清除 Root，這是正常現象。建議先在設定內關閉自動更新，需要協助重新刷入可透過下方聯絡方式預約。</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">刷機後原廠保固還在嗎？<span class="plus">＋</span></button>
+            <div class="faq-a"><p>保固是否失效由原廠認定，與本服務無關，詳細說明請見下方服務條款。</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">手機開不了機（磚機）怎麼辦？<span class="plus">＋</span></button>
+            <div class="faq-a"><p>請先不要重複自行操作，拍照或錄影目前畫面後立即聯絡。是否能修復，需實際評估後才能告知。</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">想移除 Root、恢復原廠狀態，可以嗎？<span class="plus">＋</span></button>
+            <div class="faq-a"><p>可以，請透過下方聯絡方式預約還原服務，實際可行性視機型而定。</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="terms" class="panel">
+      <div class="panel-head">TERMS — 服務條款（節錄）</div>
+      <div class="panel-body">
+        <div class="terms-box">
+          <div class="terms-group">
+            <div class="terms-group-title">📋 服務前確認</div>
+            <ol class="terms-list">
+              <li>手機須為本人所有（非分期未繳清、非贓機、非共有財產）</li>
+              <li>刷機有磚機風險，無法保證 100% 成功；資料將被清除，請自行備份，恕不負責資料遺失</li>
+              <li>刷機後原廠保固是否失效由原廠認定，與本服務無關</li>
+              <li>請提供正確機型與系統版本，資訊有誤致刷機失敗者，不予退費</li>
+              <li>寄件請自行加保，物流遺失或損壞恕不負責</li>
+            </ol>
+          </div>
+          <div class="terms-group">
+            <div class="terms-group-title">🚨 責任範圍</div>
+            <ol class="terms-list">
+              <li>操作失誤致磚機，會盡力搶救，能否修復由本人評估後告知</li>
+              <li>手機本身硬體瑕疵或非官方維修痕跡致刷機失敗，不在賠償範圍</li>
+              <li>服務僅限「刷機、Root、安裝常用工具」本身，不涉及手機原有功能、外觀、電池健康度</li>
+            </ol>
+          </div>
+          <div style="margin-top:16px;">完整條款請於下單前詳閱，下單即視為同意。</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="panel">
+      <div class="panel-head">CONTACT — 聯絡與預約</div>
+      <div class="panel-body">
+        <div class="contact-grid">
+          <div class="contact-card">
+            <div class="label">預約新單</div>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSc2nbrkhKmmwC4IkVEDNHpsbhaVqe48ZwHj2wXWpY1X9cL8tQ/viewform?usp=dialog" class="btn primary" target="_blank" rel="noopener">開始預約</a>
+          </div>
+          <div class="contact-card">
+            <div class="label">追蹤更新 / 聯絡</div>
+            <a href="https://www.threads.com/@asdasdinx55?hl=zh-tw" class="btn" target="_blank" rel="noopener">Threads @asdasdinx55</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>ASD 工作室 — 初版介面草稿，非正式上線版本 ／ ateliersourcedeck@gmail.com</footer>
+
+<script>
+function toggleFaq(btn){
+  const item = btn.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if(!wasOpen){ item.classList.add('open'); }
+}
+
+document.querySelectorAll('.quicknav a').forEach(link => {
+  link.addEventListener('click', function(){
+    document.querySelectorAll('.quicknav a.active').forEach(el => el.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+/* ====== 進度查詢：串接 Google 試算表 ======
+   可以跟買家預約表單的「回覆試算表」共用同一份，不用另外建立：
+   1. 在該回覆試算表裡，於現有表單欄位後方，自行「新增」以下欄位（欄位標題文字需完全一致）：
+      訂單編號 | 目前階段 | 賣貨便連結（僅刷機完成時填） | 備註（選填）
+      這些欄位不是表單題目，Google 表單新回覆不會清空或覆蓋它們，你可以自行填寫/用 Apps Script 自動寫入。
+   2. 「目前階段」欄位請填以下其中一個字串（要完全一樣，含符號）：
+      已收件確認中
+      手機版本檢測中
+      刷機程序進行中-秒解
+      刷機程序進行中-168小時
+      刷機完成
+   3. 試算表右上角「共用」→「一般存取權」設為「知道連結的人」（僅檢視即可）。
+   4. 把網址列的試算表 ID（/d/ 和 /edit 中間那一段）填入下面 SHEET_ID，
+      SHEET_NAME 改成分頁名稱（表單回覆分頁預設通常是「表單回應 1」）。
+   下方程式改用「欄位標題文字」比對，不管訂單編號欄位實際排在第幾欄都能抓到，
+   所以就算跟表單回覆共用、前面有一堆表單自動產生的欄位也沒關係。
+*/
+const SHEET_ID = '1wjsWFB5a2o_gWu3QCreu8uaZ-eDZ1_P7cJJvqoTyCjA';
+const SHEET_NAME = '表單回覆1';
+
+const COL_ORDER_NO = '訂單編號';
+const COL_STAGE = '目前階段';
+const COL_SHIP_LINK = '賣貨便連結';
+const COL_NOTE = '備註';
+
+const STAGE_ORDER = ['已收件確認中','手機版本檢測中','刷機進行中','刷機完成'];
+const STAGE_MAP = {
+  '已收件確認中': { step:0, label:'已收件確認中' },
+  '手機版本檢測中': { step:1, label:'手機版本檢測中' },
+  '刷機程序進行中-秒解': { step:2, label:'刷機程序進行中（秒解機型）' },
+  '刷機程序進行中-168小時': { step:2, label:'刷機程序進行中（需等待解鎖綁定 168 小時）' },
+  '刷機完成': { step:3, label:'刷機完成，待提供賣貨便連結' }
+};
+
+let ordersCache = null;
+
+async function fetchOrders(){
+  if(ordersCache) return ordersCache;
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+  const res = await fetch(url);
+  const text = await res.text();
+  const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+
+  const headers = (json.table.cols || []).map(c => (c.label || c.id || '').trim());
+  const idxOrderNo = headers.indexOf(COL_ORDER_NO);
+  const idxStage = headers.indexOf(COL_STAGE);
+  const idxShipLink = headers.indexOf(COL_SHIP_LINK);
+  const idxNote = headers.indexOf(COL_NOTE);
+
+  if(idxOrderNo === -1 || idxStage === -1){
+    throw new Error('缺少必要欄位標題（訂單編號 / 目前階段），請檢查試算表第一列欄位名稱');
+  }
+
+  const rows = (json.table.rows || []).map(r => {
+    const cells = r.c || [];
+    const get = i => (i > -1 && cells[i] && cells[i].v != null) ? String(cells[i].v).trim() : '';
+    return {
+      orderNo: get(idxOrderNo),
+      stage: get(idxStage),
+      shipLink: get(idxShipLink),
+      note: get(idxNote)
+    };
+  });
+  ordersCache = rows.filter(r => r.orderNo);
+  return ordersCache;
+}
+
+function renderConsole(lines){
+  const box = document.getElementById('lookupConsole');
+  box.innerHTML = lines.join('<br>');
+}
+
+async function lookupOrder(){
+  const input = document.getElementById('orderNoInput');
+  const btn = document.getElementById('orderNoBtn');
+  const orderNo = input.value.trim();
+  if(!orderNo){
+    renderConsole(['<span class="warn">請先輸入訂單編號</span>']);
+    return;
+  }
+  btn.disabled = true;
+  renderConsole([`<span class="dim">&gt; 查詢訂單：${escapeHtml(orderNo)}</span>`, '<span class="dim">&gt; 比對資料中...</span>']);
+
+  try{
+    const rows = await fetchOrders();
+    const match = rows.find(r => r.orderNo.toLowerCase() === orderNo.toLowerCase());
+
+    if(!match){
+      renderConsole([
+        `<span class="dim">&gt; 查詢訂單：${escapeHtml(orderNo)}</span>`,
+        '<span class="fail">[FAIL] 查無此訂單編號</span>',
+        '<span class="dim">請確認輸入是否正確，或透過下方 Threads 聯絡確認</span>'
+      ]);
+      return;
+    }
+
+    const stageInfo = STAGE_MAP[match.stage];
+    const shipLink = match.shipLink;
+    const note = match.note;
+
+    if(!stageInfo){
+      renderConsole([
+        `<span class="dim">&gt; 查詢訂單：${escapeHtml(orderNo)}</span>`,
+        `<span class="warn">[WARN] 狀態欄位內容無法辨識：${escapeHtml(match.stage || '(空白)')}</span>`,
+        '<span class="dim">請確認試算表「目前階段」欄位字串是否正確</span>'
+      ]);
+      return;
+    }
+
+    const lines = [`<span class="dim">&gt; 查詢訂單：${escapeHtml(orderNo)}</span>`];
+    STAGE_ORDER.forEach((label, i) => {
+      let displayLabel = label;
+      if(i === stageInfo.step) displayLabel = stageInfo.label;
+      if(i < stageInfo.step){
+        lines.push(`[OK] ${displayLabel}`);
+      } else if(i === stageInfo.step){
+        lines.push(`<span class="warn">[進行中] ${displayLabel}</span>`);
+      } else {
+        lines.push(`<span class="dim">[ ] ${displayLabel}</span>`);
+      }
+    });
+
+    if(stageInfo.step === 3 && shipLink){
+      lines.push(`<span class="dim">&gt; 賣貨便連結：</span><a href="${escapeAttr(shipLink)}" target="_blank" rel="noopener" style="color:var(--console-line);">${escapeHtml(shipLink)}</a>`);
+    }
+    if(note){
+      lines.push(`<span class="dim">&gt; 備註：${escapeHtml(note)}</span>`);
+    }
+
+    renderConsole(lines);
+  } catch(err){
+    renderConsole([
+      '<span class="fail">[FAIL] 查詢暫時無法使用</span>',
+      '<span class="dim">請稍後再試，或透過下方 Threads 聯絡確認</span>'
+    ]);
+  } finally{
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('orderNoInput').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') lookupOrder();
+});
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(str){
+  return String(str).replace(/"/g, '&quot;');
+}
+</script>
+
+</body>
+</html>
