@@ -31,7 +31,7 @@
     --radius-pill:999px;
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; overflow-x:hidden; max-width:100%;}
   body{
     margin:0;
     background:var(--bg);
@@ -39,6 +39,7 @@
     font-family:'Noto Sans TC', sans-serif;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
+    max-width:100%;
   }
   .mono{ font-family:'IBM Plex Mono', monospace; }
 
@@ -134,7 +135,15 @@
     filter:drop-shadow(0 40px 70px rgba(0,0,0,0.6));
   }
   @media (max-width:680px){
-    .hero-logo{ width:380px; top:-60px; right:-110px; opacity:0.5; }
+    .hero-logo{ display:none; }
+  }
+  .hero-logo-mobile{
+    display:none; margin:0 auto 18px; width:180px; max-width:60%;
+    filter:drop-shadow(0 10px 26px rgba(0,0,0,0.5));
+  }
+  @media (max-width:680px){
+    .hero-logo-mobile{ display:block; }
+    .hero h1{ display:none; }
   }
   .hero .eyebrow{
     font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--accent);
@@ -325,6 +334,10 @@
     .hero .eyebrow{ font-size:11.5px; }
     .hero h1{ font-size:23px; line-height:1.45; }
     .hero p{ font-size:14px; line-height:1.75; }
+    .cta-row{
+      display:grid; grid-template-columns:1fr 1fr; gap:10px;
+    }
+    .cta-row .btn{ justify-content:center; text-align:center; width:100%; }
     .step{ gap:12px; padding:12px 0; }
     .step::before{ width:30px; height:30px; font-size:12px; }
     .step h3{ font-size:14.5px; }
@@ -370,12 +383,13 @@
     <section class="hero">
       <img class="hero-logo" src="logo.png" alt="ASD 工作室 Logo">
       <div class="eyebrow">ASD 工作室 — ANDROID 刷機 / ROOT 售後支援</div>
+      <img class="hero-logo-mobile" src="logo.png" alt="ASD 工作室 Logo">
       <h1>手機解鎖、Root、常用工具安裝服務。<br>流程公開透明，買家隨時能查進度、找答案。</h1>
       <p>提供 Android 手機解鎖、Root 與常用工具安裝，下方可以先了解完整服務流程與安裝項目。已經是買家的話，可以直接查詢訂單進度或翻閱常見問題，找不到答案再預約聯絡。</p>
       <div class="cta-row">
         <a href="#process" class="btn primary">了解服務流程</a>
-        <a href="#lookup" class="btn">查詢訂單進度</a>
         <a href="support.html" class="btn">售後支援</a>
+        <a href="#lookup" class="btn">查詢訂單進度</a>
         <a href="#contact" class="btn">預約 / 聯絡</a>
       </div>
     </section>
