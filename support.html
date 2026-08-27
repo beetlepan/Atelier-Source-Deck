@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>售後支援 — ASD 工作室</title>
+<title>售後支援/軟體更新 — ASD 工作室</title>
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
@@ -274,6 +274,26 @@
   .tool-card.important h4{ color:var(--ink); }
   .tool-card.important p{ color:var(--accent); }
 
+  /* ---- Software update cards ---- */
+  .updates-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; }
+  .update-card{
+    border:1px solid var(--border); border-radius:var(--radius); padding:16px;
+    background:var(--panel-alt);
+  }
+  .update-card h4{ margin:0 0 6px; font-size:16px; }
+  .update-card .meta{
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--muted); margin-bottom:10px;
+  }
+  .update-card .desc{ font-size:13px; color:var(--muted); line-height:1.6; margin:0 0 16px; }
+  .update-card .btn-row{ display:flex; gap:10px; }
+  .update-card .btn-row .btn{ flex:1; justify-content:center; }
+  .updates-subhead{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent);
+    letter-spacing:0.06em; margin:0 0 12px;
+  }
+  .updates-divider{ border:none; border-top:1px solid var(--border); margin:26px 0; }
+
   /* ---- FAQ accordion ---- */
   .faq-item{ border-bottom:1px solid var(--border); }
   .faq-item:last-child{ border-bottom:none; }
@@ -363,7 +383,7 @@
   <header class="site-header">
     <div class="titlebar">
       <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-      <span class="app-name">ASD 工作室 — 售後支援</span>
+      <span class="app-name">ASD 工作室 — 售後支援/軟體更新</span>
       <div class="conn"><span class="conn-dot"></span>連線正常</div>
       <button id="navToggle" class="nav-toggle" aria-label="開啟選單" aria-expanded="false" onclick="toggleNav()">
         <span></span><span></span><span></span>
@@ -372,7 +392,7 @@
     <nav class="quicknav" id="quicknav">
       <a href="index.html">← 返回首頁</a>
       <a href="#faq">常見問題</a>
-      <a href="#cases">案例分享</a>
+      <a href="#updates">軟體更新</a>
       <a href="index.html#contact">聯絡預約</a>
     </nav>
   </header>
@@ -380,14 +400,15 @@
   <div class="wrap">
 
     <section class="hero" style="padding:32px 0 8px;">
-      <div class="eyebrow">ASD 工作室 — 售後支援</div>
-      <h1>常見問題 ＆ 實際案例整理。<br>先查查看，找不到答案再預約聯絡。</h1>
-      <p>這裡整理了買家常問的問題，以及目前實際處理過的狀況案例、發生原因與解決方式，持續更新中。</p>
+      <div class="eyebrow">ASD 工作室 — 售後支援/軟體更新</div>
+      <h1>常見問題 ＆ 軟體更新。<br>先查查看，找不到答案再聯絡我們。</h1>
+      <p>這裡整理了買家常問的問題、目前實際處理過的狀況案例與解決方式，以及常用軟體的最新版本連結。軟體更新可以自行依需求下載 APK，在手機上安裝更新，內容持續更新中。</p>
     </section>
 
     <section id="faq" class="panel">
       <div class="panel-head">FAQ — 常見問題自助排除</div>
       <div class="panel-body">
+        <div class="updates-subhead">常見問題</div>
         <div class="faq-list">
           <div class="faq-item">
             <button class="faq-q" onclick="toggleFaq(this)">為什麼銀行、薪資轉帳 App 顯示「裝置不安全」？<span class="plus">＋</span></button>
@@ -410,12 +431,10 @@
             <div class="faq-a"><p>可以，請透過下方聯絡方式預約還原服務，實際可行性視機型而定。</p></div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <section id="cases" class="panel">
-      <div class="panel-head">CASES — 實際案例整理</div>
-      <div class="panel-body">
+        <hr class="updates-divider">
+
+        <div class="updates-subhead">案例分享</div>
         <div class="faq-list">
           <div class="faq-item">
             <button class="faq-q" onclick="toggleFaq(this)">關聯應用程式啟動異常，例如點選 GPS 位置只會開啟 Google Map，如何改成自動開啟 Joystick？<span class="plus">＋</span></button>
@@ -429,6 +448,96 @@
               <p>有兩個處理方式：</p>
               <p>1. 直接按「取消」，訊息就會消失，不影響遊戲使用。</p>
               <p>2. 安裝三星官方商城 Galaxy Store APK（<a href="https://www.apkmirror.com/apk/samsung-electronics-co-ltd/galaxy-apps/" target="_blank" rel="noopener" style="color:var(--accent);">下載連結</a>），安裝好後先開啟商城，再開啟 Pokémon GO 即可。</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">需要 Pgtools 付費帳號，哪裡可以買？<span class="plus">＋</span></button>
+            <div class="faq-a">
+              <p>工作室不提供此類付費帳號，請自行於網路上尋找購買管道。</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">Pokémon GO 用小米內建雙開，出現無法存取位置（錯誤代碼 12）怎麼辦？<span class="plus">＋</span></button>
+            <div class="faq-a">
+              <p>在雙開（分身）頁面把「Hide Mock Location」一併克隆複製，接著進入 LSPosed 頁面找到該模組，點選 XSpace，勾選克隆出來的 Pokémon GO 即可。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="updates" class="panel">
+      <div class="panel-head">UPDATES — 軟體更新</div>
+      <div class="panel-body">
+        <div class="updates-subhead">ROOT 相關</div>
+        <div class="updates-grid">
+          <div class="update-card">
+            <h4>KernelSU</h4>
+            <div class="meta"><span>tiann</span><span>·</span><span>2026-06-23</span><span>·</span><span>⭐ 18k</span></div>
+            <p class="desc">核心層級（Kernel-based）的 Root 解決方案，提供裝置 Root 權限的核心框架，是常用的 ROOT 底層元件之一。</p>
+            <div class="btn-row">
+              <a href="https://github.com/tiann/KernelSU/releases" target="_blank" rel="noopener" class="btn primary">下載</a>
+              <a href="https://kernelsu.org/guide/installation.html" target="_blank" rel="noopener" class="btn">教程</a>
+            </div>
+          </div>
+          <div class="update-card">
+            <h4>SukiSU Ultra</h4>
+            <div class="meta"><span>ShirkNeko</span><span>·</span><span>2026-06-02</span><span>·</span><span>⭐ 6.1k</span></div>
+            <p class="desc">同樣是核心層級 Root 方案，KernelSU 的衍生分支，另外支援 KPM（核心模組）功能。</p>
+            <div class="btn-row">
+              <a href="https://github.com/SukiSU-Ultra/SukiSU-Ultra/releases" target="_blank" rel="noopener" class="btn primary">下載</a>
+              <a href="https://github.com/SukiSU-Ultra/SukiSU-Ultra" target="_blank" rel="noopener" class="btn">GitHub</a>
+            </div>
+          </div>
+          <div class="update-card">
+            <h4>Magisk</h4>
+            <div class="meta"><span>topjohnwu</span><span>·</span><span>2026-02-23</span><span>·</span><span>⭐ 62.5k</span></div>
+            <p class="desc">最經典的 Root 工具之一，透過系統層修改實現免動分割區的 Root 方式，生態系與模組最完整。</p>
+            <div class="btn-row">
+              <a href="https://github.com/topjohnwu/Magisk/releases" target="_blank" rel="noopener" class="btn primary">下載</a>
+              <a href="https://topjohnwu.github.io/Magisk/install.html" target="_blank" rel="noopener" class="btn">教程</a>
+            </div>
+          </div>
+          <div class="update-card">
+            <h4>Vector（原 LSPosed）</h4>
+            <div class="meta"><span>JingMatrix</span><span>·</span><span>2026-08-04</span><span>·</span><span>⭐ 12.2k</span></div>
+            <p class="desc">Xposed 模組執行框架，原名 LSPosed，2026 年更名為 Vector，用來執行各類系統模組。</p>
+            <div class="btn-row">
+              <a href="https://github.com/JingMatrix/Vector/releases" target="_blank" rel="noopener" class="btn primary">下載</a>
+              <a href="https://github.com/JingMatrix/Vector" target="_blank" rel="noopener" class="btn">GitHub</a>
+            </div>
+          </div>
+          <div class="update-card">
+            <h4>Play Integrity Fix</h4>
+            <div class="meta"><span>KOWX712</span><span>·</span><span>2026-07-11</span><span>·</span><span>⭐ 3.8k</span></div>
+            <p class="desc">修正 Google Play 完整性驗證結果，改善 Root 後銀行、遊戲等對裝置驗證較嚴格的 App 相容性。</p>
+            <div class="btn-row">
+              <a href="https://github.com/KOWX712/PlayIntegrityFix/releases" target="_blank" rel="noopener" class="btn primary">下載</a>
+              <a href="https://github.com/KOWX712/PlayIntegrityFix" target="_blank" rel="noopener" class="btn">GitHub</a>
+            </div>
+          </div>
+        </div>
+
+        <hr class="updates-divider">
+
+        <div class="updates-subhead">遊戲相關</div>
+        <div class="updates-grid">
+          <div class="update-card">
+            <h4>Hide Mock Location</h4>
+            <div class="meta"><span>auag0</span><span>·</span><span>2026-04-17</span><span>·</span><span>⭐ 21</span></div>
+            <p class="desc">隱藏「允許模擬位置」開發者選項的偵測，常搭配定位模擬工具用於遊戲定位偽裝（如虛擬定位抓寶）。</p>
+            <div class="btn-row">
+              <a href="https://github.com/auag0/HideMockLocation/releases" target="_blank" rel="noopener" class="btn primary">下載</a>
+              <a href="https://github.com/auag0/HideMockLocation" target="_blank" rel="noopener" class="btn">GitHub</a>
+            </div>
+          </div>
+          <div class="update-card">
+            <h4>Pokémon GO（三星 Galaxy Store 版）</h4>
+            <div class="meta"><span>Niantic, Inc.</span><span>·</span><span>2026-08-22</span><span>·</span><span>⬇ 10,848</span></div>
+            <p class="desc">三星機型專用版本，適用於三星裝置安裝相容性問題（如商城購買異常）的情況，版本 0.425.1。</p>
+            <div class="btn-row">
+              <a href="https://www.apkmirror.com/apk/niantic-inc/pokemon-go-samsung-galaxy-apps-version/" target="_blank" rel="noopener" class="btn primary">下載</a>
+              <a href="https://play.google.com/store/apps/details?id=com.nianticlabs.pokemongo.ares" target="_blank" rel="noopener" class="btn">官方頁面</a>
             </div>
           </div>
         </div>
