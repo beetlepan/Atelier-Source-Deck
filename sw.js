@@ -1,9 +1,9 @@
-const CACHE_NAME = 'asd-workshop-v1';
+const CACHE_NAME = 'asd-workshop-v2';
 const PRECACHE_URLS = [
   '/index.html',
   '/support.html',
-  '/logo.png',
-  '/favicon.ico'
+  '/icons/logo.png',
+  '/icons/favicon.ico'
 ];
 
 self.addEventListener('install', (event) => {
