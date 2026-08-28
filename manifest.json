@@ -1,0 +1,31 @@
+{
+  "name": "ASD 工作室",
+  "short_name": "ASD工作室",
+  "description": "Android 手機解鎖、Root、常用工具安裝服務 — 流程公開透明，買家隨時能查進度、找答案。",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0A0C0E",
+  "theme_color": "#0A0C0E",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "pwa-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "pwa-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "pwa-icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
