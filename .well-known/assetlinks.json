@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.ateliersourcedeck.twa",
+        "sha256_cert_fingerprints": ["DD:E9:E1:DF:E5:7D:7A:4D:A4:58:C9:58:9E:15:A0:4B:6F:DC:F6:3D:EC:34:80:BE:15:FF:78:F9:DE:17:7F:D1"]
+      }
+    }]
