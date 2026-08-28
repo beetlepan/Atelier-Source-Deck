@@ -560,12 +560,9 @@ const STAGE_MAP = {
   '刷機完成': { step:3, label:'刷機完成，待提供賣貨便連結' }
 };
 
-let ordersCache = null;
-
 async function fetchOrders(){
-  if(ordersCache) return ordersCache;
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
-  const res = await fetch(url);
+  const res = await fetch(url, { cache: 'no-store' });
   const text = await res.text();
   const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
 
@@ -589,8 +586,7 @@ async function fetchOrders(){
       note: get(idxNote)
     };
   });
-  ordersCache = rows.filter(r => r.orderNo);
-  return ordersCache;
+  return rows.filter(r => r.orderNo);
 }
 
 function renderConsole(lines){
