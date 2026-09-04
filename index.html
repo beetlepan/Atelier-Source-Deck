@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ASD 工作室｜Android 手機解鎖、Root 與常用工具安裝服務</title>
-<meta name="description" content="ASD 工作室提供 Android 手機解鎖、Root 與常用工具安裝服務，多數機型統一價 $700。流程公開透明，可線上查詢訂單進度，提供售後支援與常見問題排除。">
+<title>ASD 工作室｜手機解鎖・Root・磚機救援・飛人安裝</title>
+<meta name="description" content="ASD 工作室提供 Android 手機解鎖、Root、磚機救援、常用工具安裝與 Pokémon GO 飛人軟體安裝服務，多數機型統一價 $700。流程公開透明，可線上查詢訂單進度，提供售後支援與常見問題排除。">
 <link rel="canonical" href="https://ateliersourcedeck.com/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="ASD 工作室｜Android 手機解鎖、Root 與常用工具安裝服務">
-<meta property="og:description" content="流程公開透明，買家隨時能查進度、找答案。多數機型統一價 $700，實際報價依預約後回覆為準。">
+<meta property="og:title" content="ASD 工作室｜手機解鎖・Root・磚機救援・飛人安裝">
+<meta property="og:description" content="進度可查、問題有答，完工前實際測試確認。多數機型統一價 $700，實際報價依預約後回覆為準。">
 <meta property="og:image" content="https://ateliersourcedeck.com/icons/pwa-icon-512.png">
 <meta property="og:url" content="https://ateliersourcedeck.com/">
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ASD 工作室｜Android 手機解鎖、Root 與常用工具安裝服務">
-<meta name="twitter:description" content="流程公開透明，買家隨時能查進度、找答案。">
+<meta name="twitter:title" content="ASD 工作室｜手機解鎖・Root・磚機救援・飛人安裝">
+<meta name="twitter:description" content="進度可查、問題有答，完工前實際測試確認。">
 <meta name="twitter:image" content="https://ateliersourcedeck.com/icons/pwa-icon-512.png">
 <link rel="icon" type="image/x-icon" href="icons/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -256,6 +256,30 @@
   .tools-grid{
     display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px;
   }
+  .services-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px;
+  }
+  @media (max-width:680px){
+    .services-grid{ grid-template-columns:1fr; }
+  }
+  .service-hero{
+    margin-bottom:12px; min-height:150px;
+    display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
+    transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  @media (max-width:680px){
+    .service-hero{ min-height:0; }
+  }
+  .service-hero:hover, .services-grid .tool-card:hover{
+    transform:translateY(-4px);
+    border-color:var(--accent);
+    box-shadow:0 0 0 1px rgba(57,255,107,0.4), 0 0 28px rgba(57,255,107,0.4), 0 10px 24px rgba(0,0,0,0.35);
+  }
+  .services-grid .tool-card{
+    transition:background .15s ease, border-color .2s ease, backdrop-filter .15s ease, transform .2s ease, box-shadow .2s ease;
+  }
+  .tool-card.clickable{ cursor:pointer; }
+  .tool-card.clickable:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
   .tool-card{
     border:1px solid var(--border); border-radius:var(--radius); padding:14px;
     background:var(--panel-alt);
@@ -335,6 +359,7 @@
   .contact-card{
     flex:1; min-width:180px; border:1px solid var(--border); border-radius:var(--radius);
     padding:16px; text-align:center; background:var(--panel-alt);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
   }
   .contact-card .label{ font-size:13px; color:var(--muted); margin-bottom:8px; }
 
@@ -371,6 +396,48 @@
     html{ scroll-behavior:auto; }
     .faq-a{ transition:none; }
   }
+
+  /* ---- Tools modal ---- */
+  .modal-overlay{
+    display:flex; position:fixed; inset:0; z-index:100;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    align-items:center; justify-content:center; padding:20px;
+    opacity:0; visibility:hidden; pointer-events:none;
+    transition:opacity .25s ease, visibility .25s ease;
+  }
+  .modal-overlay.open{ opacity:1; visibility:visible; pointer-events:auto; }
+  .modal-box{
+    background:var(--panel); border:1px solid var(--border-strong); border-radius:var(--radius);
+    max-width:760px; width:100%; max-height:85vh; overflow-y:auto;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    transform:scale(0.94) translateY(8px);
+    transition:transform .28s cubic-bezier(.2,.8,.2,1);
+  }
+  .modal-overlay.open .modal-box{ transform:scale(1) translateY(0); }
+  .modal-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 18px; border-bottom:1px solid var(--border);
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.06em;
+    color:var(--muted); text-transform:uppercase; position:sticky; top:0; background:var(--panel);
+  }
+  .modal-close{
+    background:none; border:none; color:var(--muted); font-size:20px; line-height:1; cursor:pointer;
+    padding:4px 8px; border-radius:6px;
+  }
+  .modal-close:hover{ color:var(--ink); background:var(--panel-alt); }
+  .modal-body{ padding:18px; }
+  .modal-tools-list{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  @media (max-width:680px){
+    .modal-tools-list{ grid-template-columns:1fr; }
+  }
+  .modal-chip-list{ display:flex; flex-wrap:wrap; gap:10px; }
+  .modal-chip{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--ink);
+    border:1px solid var(--border-strong); border-radius:20px; padding:7px 14px;
+    background:var(--panel-alt);
+  }
+  .modal-chip.dashed{ border-style:dashed; color:var(--muted); }
 </style>
 </head>
 <body>
@@ -385,9 +452,10 @@
       </button>
     </div>
     <nav class="quicknav" id="quicknav">
+      <a href="#services">服務項目</a>
       <a href="#process">服務流程</a>
       <a href="#lookup">進度查詢</a>
-      <a href="#tools">安裝套件</a>
+      <a href="javascript:void(0)" onclick="openToolsModal(); return false;">安裝套件</a>
       <a href="support.html">售後支援/軟體更新</a>
       <a href="#terms">服務條款</a>
       <a href="#contact">聯絡預約</a>
@@ -398,27 +466,59 @@
 
     <section class="hero">
       <img class="hero-logo" src="icons/logo.png" alt="ASD 工作室 Logo">
-      <div class="eyebrow">ASD 工作室 — ANDROID 刷機 / ROOT 售後支援</div>
+      <div class="eyebrow">ASD 工作室 — ANDROID 刷機 / ROOT / 磚機救援 / 飛人安裝</div>
       <img class="hero-logo-mobile" src="icons/logo.png" alt="ASD 工作室 Logo">
-      <h1>手機解鎖、Root、常用工具安裝服務。<br>流程公開透明，買家隨時能查進度、找答案。</h1>
-      <p>提供 Android 手機解鎖、Root 與常用工具安裝，<span class="highlight-mark">多數機型統一價 $700（不含運費，實際報價依預約後工作室回覆為準）</span>。下方可以先了解完整服務流程與安裝項目。已經是買家的話，可以直接查詢訂單進度或翻閱常見問題，找不到答案再請聯絡我們。</p>
+      <h1>手機解鎖、Root、磚機救援與飛人安裝服務。<br>進度可查、問題有答，完工前實際測試確認。</h1>
+      <p>提供 Android 手機解鎖、Root、磚機救援、常用工具安裝與 Pokémon GO 飛人軟體安裝，<span class="highlight-mark">多數機型統一價 $700（不含運費，實際報價依預約後工作室回覆為準）</span>。下方可以先了解完整服務項目與流程。已經是買家的話，可以直接查詢訂單進度或翻閱常見問題，找不到答案再請聯絡我們。</p>
       <div class="cta-row">
         <a href="#process" class="btn primary">了解服務流程</a>
         <a href="support.html" class="btn">售後支援/軟體更新</a>
         <a href="#lookup" class="btn">查詢訂單進度</a>
-        <a href="#contact" class="btn">預約 / 聯絡</a>
+        <a href="#contact" class="btn">實際案例/預約聯絡</a>
+      </div>
+      <p style="font-size:14.5px; color:var(--muted); margin:14px 0 0; line-height:1.7;">🛡️ 完工後 1 個月內，如不小心自行移除 Root、軟體無法使用或無法開機，<span class="highlight-mark">免費協助處理（僅需負擔運費）</span>；嚴重磚機需工程模式救援者除外，<a href="#terms" style="color:var(--accent);">詳見服務條款</a>。</p>
+    </section>
+
+    <section id="services" class="panel">
+      <div class="panel-head">SERVICES — 服務項目</div>
+      <div class="panel-body">
+        <div class="tool-card service-hero">
+          <span class="tag">解鎖</span>
+          <h4>Bootloader 解鎖／降級</h4>
+          <p>刷機第一步，解鎖手機的開機引導程式鎖，為後續安裝 Root 做準備；解鎖後也可用於系統版本降級。</p>
+        </div>
+        <div class="services-grid">
+          <div class="tool-card clickable" onclick="openToolsModal()" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openToolsModal()">
+            <span class="tag">ROOT</span>
+            <h4>Root 安裝與隱藏套件</h4>
+            <p>安裝 Root 權限框架，並搭配隱藏套件安裝，避免銀行、薪資轉帳等 App 偵測到裝置已 Root 而無法使用。<span style="color:var(--accent);">點看安裝套件 →</span></p>
+          </div>
+          <div class="tool-card">
+            <span class="tag">飛人</span>
+            <h4>Pokémon GO 飛人軟體安裝</h4>
+            <p>協助安裝 GPS 定位模擬（飛人）軟體，可虛擬移動、遠端抓寶，並搭配 Hide Mock Location 隱藏偵測。⚠️ 此類工具違反遊戲官方服務條款，使用有帳號被封鎖的風險，請自行評估。</p>
+          </div>
+          <div class="tool-card">
+            <span class="tag">救援</span>
+            <h4>磚機救援／系統修復</h4>
+            <p>手機刷機失敗、系統損毀無法開機，提供救援嘗試。多數狀況比照統一價，狀況較複雜的案例將個別評估報價。</p>
+          </div>
+          <div class="tool-card">
+            <span class="tag">售後</span>
+            <h4>常用軟體與售後支援</h4>
+            <p>常見問題自助排除、實際案例整理，以及常用軟體最新版本更新連結。<a href="support.html" style="color:var(--accent); text-decoration:none;">前往售後支援頁 →</a></p>
+          </div>
+        </div>
       </div>
     </section>
 
     <section id="process" class="panel">
-      <div class="panel-head">PROCESS — 服務流程（依實際作業順序）</div>
+      <div class="panel-head">PROCESS — 服務流程</div>
       <div class="panel-body">
         <ul class="steps">
           <li class="step"><div><h3>收件確認</h3><p>拍照記錄手機外觀，確認目前系統版本，作為前後對照依據。</p></div></li>
-          <li class="step"><div><h3>告知完工時間</h3><p>確認機況後，會告知確切完工時間，避免反覆詢問進度。</p></div></li>
-          <li class="step"><div><h3>解鎖 Bootloader</h3><p>開始刷機第一步，此步驟會清除機身所有資料。</p></div></li>
-          <li class="step"><div><h3>安裝 Root 主程式</h3><p>依機型安裝對應的 Root 框架。</p></div></li>
-          <li class="step"><div><h3>安裝隱藏套件（約 5–7 項）</h3><p>避免銀行、薪資轉帳等 App 偵測到裝置已 Root 而無法使用。</p></div></li>
+          <li class="step"><div><h3>告知完工時間</h3><p>收到手機半小時內，確認機況並告知確切完工時間，避免反覆詢問進度。</p></div></li>
+          <li class="step"><div><h3>服務執行（依實際需求）</h3><p>依客戶需求進行對應服務，如解鎖、Root 安裝、隱藏套件安裝、磚機救援等。</p></div></li>
           <li class="step"><div><h3>功能測試</h3><p>測試裝置可正常使用，依需求提供完工照片或影片。</p></div></li>
           <li class="step"><div><h3>交付結案</h3><p>確認收款後面交或回寄，完成交易。</p></div></li>
         </ul>
@@ -439,24 +539,8 @@
       </div>
     </section>
 
-    <section id="tools" class="panel">
-      <div class="panel-head">INSTALLED PACKAGES — 本次安裝套件</div>
-      <div class="panel-body">
-        <div class="tools-grid">
-          <div class="tool-card important"><span class="tag">解鎖步驟</span><h4>手機 Bootloader Unlock</h4><p>刷機第一步，解鎖開機引導程式鎖，此步驟會清除機身所有資料。</p></div>
-          <div class="tool-card"><span class="tag">ROOT 框架</span><h4>KernelSU</h4><p>提供裝置 Root 權限的核心框架。</p></div>
-          <div class="tool-card"><span class="tag">系統模組</span><h4>LSPosed</h4><p>執行常用系統層級模組。</p></div>
-          <div class="tool-card"><span class="tag">隱藏環境</span><h4>Zygisk</h4><p>隱藏 Root 狀態，降低被 App 偵測的機率。</p></div>
-          <div class="tool-card"><span class="tag">隱藏環境</span><h4>Play Integrity Fix</h4><p>修復裝置完整性檢測，改善銀行等 App 相容性。</p></div>
-          <div class="tool-card"><span class="tag">隱藏環境</span><h4>HMA-OSS</h4><p>協助偽裝機型資訊，降低偵測風險。</p></div>
-          <div class="tool-card"><span class="tag">維護工具</span><h4>TEESimulator-RS</h4><p>模擬金鑰認證環境，維持長期使用穩定度。</p></div>
-          <div class="tool-card" style="border-style:dashed;"><span class="tag">依需求</span><h4>其他客戶指定軟體</h4><p>視買家個別需求另行安裝，項目與說明可依實際情況調整。</p></div>
-        </div>
-      </div>
-    </section>
-
     <section id="terms" class="panel">
-      <div class="panel-head">TERMS — 服務條款（節錄）</div>
+      <div class="panel-head">TERMS — 服務條款</div>
       <div class="panel-body">
         <div class="terms-box">
           <div class="terms-group">
@@ -477,6 +561,15 @@
               <li>服務僅限「刷機、Root、安裝常用工具」本身，不涉及手機原有功能、外觀、電池健康度</li>
             </ol>
           </div>
+          <div class="terms-group">
+            <div class="terms-group-title">🛡️ 保固說明</div>
+            <ol class="terms-list">
+              <li>完工後 1 個月內，如不小心自行移除 Root、軟體無法使用、或裝置無法正常開機等狀況，可免費協助處理，買家僅需負擔來回運費</li>
+              <li>實際處理方式依工作室收到裝置後的檢測結果為準；若診斷為完全黑屏、需透過 9008 等工程模式救援的嚴重磚機情況，不在此免費範圍，將另行報價</li>
+              <li>保固不包含非本工作室操作造成的問題（如客戶自行刷入其他系統、拆機、泡水、摔損等）</li>
+              <li>申請保固需提供完工訂單編號，工作室將核對收件紀錄（含裝置 IMEI／序號）確認為同一台裝置</li>
+            </ol>
+          </div>
           <div style="margin-top:16px;">完整條款請於下單前詳閱，下單即視為同意。</div>
         </div>
       </div>
@@ -491,13 +584,34 @@
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSc2nbrkhKmmwC4IkVEDNHpsbhaVqe48ZwHj2wXWpY1X9cL8tQ/viewform?usp=dialog" class="btn primary" target="_blank" rel="noopener">開始預約</a>
           </div>
           <div class="contact-card">
-            <div class="label">追蹤更新 / 聯絡</div>
-            <a href="https://www.threads.com/@asdasdinx55?hl=zh-tw" class="btn" target="_blank" rel="noopener">Threads @asdasdinx55</a>
+            <div class="label">案例追蹤</div>
+            <a href="https://www.instagram.com/asdasdinx55/" class="btn" target="_blank" rel="noopener">Instagram @asdasdinx55</a>
           </div>
         </div>
       </div>
     </section>
 
+  </div>
+
+  <div class="modal-overlay" id="toolsModal" onclick="if(event.target===this) closeToolsModal()">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="toolsModalTitle">
+      <div class="modal-head">
+        <span id="toolsModalTitle">安裝套件</span>
+        <button class="modal-close" onclick="closeToolsModal()" aria-label="關閉">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-tools-list">
+          <div class="tool-card"><span class="tag">ROOT 框架</span><h4>KernelSU</h4><p>核心層級（Kernel-based）的 Root 框架，提供裝置 Root 權限的核心元件。</p></div>
+          <div class="tool-card"><span class="tag">ROOT 框架</span><h4>Magisk</h4><p>最經典的 Root 工具之一，透過系統層修改實現免動分割區的 Root 方式。</p></div>
+          <div class="tool-card"><span class="tag">系統模組</span><h4>LSPosed</h4><p>執行常用系統層級模組的 Xposed 框架。</p></div>
+          <div class="tool-card"><span class="tag">隱藏環境</span><h4>Zygisk</h4><p>隱藏 Root 狀態，降低被 App 偵測的機率。</p></div>
+          <div class="tool-card"><span class="tag">隱藏環境</span><h4>Play Integrity Fix</h4><p>修復裝置完整性檢測，改善銀行等 App 相容性。</p></div>
+          <div class="tool-card"><span class="tag">隱藏環境</span><h4>HMA-OSS</h4><p>協助偽裝機型資訊，降低偵測風險。</p></div>
+          <div class="tool-card"><span class="tag">維護工具</span><h4>TEESimulator-RS</h4><p>模擬金鑰認證環境，維持長期使用穩定度。</p></div>
+          <div class="tool-card" style="border-style:dashed;"><span class="tag">依需求</span><h4>其他客戶指定軟體</h4><p>視買家個別需求另行安裝，項目與說明可依實際情況調整。</p></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <footer>ASD 工作室 ／ ateliersourcedeck@gmail.com</footer>
@@ -509,6 +623,16 @@ function toggleFaq(btn){
   document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
   if(!wasOpen){ item.classList.add('open'); }
 }
+
+function openToolsModal(){
+  document.getElementById('toolsModal').classList.add('open');
+}
+function closeToolsModal(){
+  document.getElementById('toolsModal').classList.remove('open');
+}
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeToolsModal();
+});
 
 document.querySelectorAll('.quicknav a').forEach(link => {
   link.addEventListener('click', function(){
