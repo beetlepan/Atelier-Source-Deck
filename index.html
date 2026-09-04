@@ -470,22 +470,22 @@
       <img class="hero-logo-mobile" src="icons/logo.png" alt="ASD 工作室 Logo">
       <h1>手機解鎖、Root、磚機救援與飛人安裝服務。<br>進度可查、問題有答，完工前實際測試確認。</h1>
       <p>提供 Android 手機解鎖、Root、磚機救援、常用工具安裝與 Pokémon GO 飛人軟體安裝，<span class="highlight-mark">多數機型統一價 $700（不含運費，實際報價依預約後工作室回覆為準）</span>。下方可以先了解完整服務項目與流程。已經是買家的話，可以直接查詢訂單進度或翻閱常見問題，找不到答案再請聯絡我們。</p>
+      <p>🛡️ 完工後 1 個月內，如不小心自行移除 Root、軟體無法使用或無法開機，<span class="highlight-mark">免費協助處理（僅需負擔運費）</span>；嚴重磚機需工程模式救援者除外，<a href="#terms" style="color:var(--accent);">詳見服務條款</a>。</p>
       <div class="cta-row">
         <a href="#process" class="btn primary">了解服務流程</a>
         <a href="support.html" class="btn">售後支援/軟體更新</a>
         <a href="#lookup" class="btn">查詢訂單進度</a>
         <a href="#contact" class="btn">實際案例/預約聯絡</a>
       </div>
-      <p style="font-size:14.5px; color:var(--muted); margin:14px 0 0; line-height:1.7;">🛡️ 完工後 1 個月內，如不小心自行移除 Root、軟體無法使用或無法開機，<span class="highlight-mark">免費協助處理（僅需負擔運費）</span>；嚴重磚機需工程模式救援者除外，<a href="#terms" style="color:var(--accent);">詳見服務條款</a>。</p>
     </section>
 
     <section id="services" class="panel">
       <div class="panel-head">SERVICES — 服務項目</div>
       <div class="panel-body">
-        <div class="tool-card service-hero">
+        <div class="tool-card service-hero clickable" onclick="openUnlockModal()" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openUnlockModal()">
           <span class="tag">解鎖</span>
           <h4>Bootloader 解鎖／降級</h4>
-          <p>刷機第一步，解鎖手機的開機引導程式鎖，為後續安裝 Root 做準備；解鎖後也可用於系統版本降級。</p>
+          <p>刷機第一步，解鎖手機的開機引導程式鎖，為後續安裝 Root 做準備；解鎖後也可用於系統版本降級。<span style="color:var(--accent);">點看解鎖為何？ →</span></p>
         </div>
         <div class="services-grid">
           <div class="tool-card clickable" onclick="openToolsModal()" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openToolsModal()">
@@ -614,6 +614,21 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="unlockModal" onclick="if(event.target===this) closeUnlockModal()">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="unlockModalTitle" style="max-width:600px;">
+      <div class="modal-head">
+        <span id="unlockModalTitle">什麼是 Bootloader 解鎖？</span>
+        <button class="modal-close" onclick="closeUnlockModal()" aria-label="關閉">✕</button>
+      </div>
+      <div class="modal-body" style="line-height:1.9; font-size:14px; color:var(--muted);">
+        <p style="margin:0 0 14px;">Android 手機的「Bootloader」是裝置開機時最先執行的程式，負責決定要載入哪一份系統映像檔、並驗證這份映像檔是否經過原廠授權。原廠出貨時預設會鎖定 Bootloader，只允許執行官方簽署過的系統，藉此防止系統被竄改、確保裝置安全與資料完整。</p>
+        <p style="margin:0 0 14px;">解鎖 Bootloader 後，才能刷寫非官方的系統映像檔或分割區，是安裝 Root、刷入客製化系統的必要前提。根據 Android 官方規範，解鎖過程本身會將裝置恢復原廠設定、清除所有資料——這是刻意設計的安全機制，用意是避免解鎖後裝置裡原本的個人資料被存取，並不是工作室刻意清空。</p>
+        <p style="margin:0 0 14px;">解鎖後，裝置的「已驗證開機」信任鏈會改變，這也是為什麼部分銀行、薪資轉帳等 App 事後可能會偵測到裝置「不安全」的原因（可透過隱藏套件因應，詳見安裝套件說明）。</p>
+        <p style="margin:0; padding-top:10px; border-top:1px solid var(--border); font-size:12.5px;">資料來源：<a href="https://source.android.com/docs/core/architecture/bootloader/locking_unlocking?hl=zh-tw" target="_blank" rel="noopener" style="color:var(--accent);">Android Open Source Project 官方文件 — 鎖定及解鎖系統啟動載入程式 ↗</a></p>
+      </div>
+    </div>
+  </div>
+
   <footer>ASD 工作室 ／ ateliersourcedeck@gmail.com</footer>
 
 <script>
@@ -630,8 +645,17 @@ function openToolsModal(){
 function closeToolsModal(){
   document.getElementById('toolsModal').classList.remove('open');
 }
+function openUnlockModal(){
+  document.getElementById('unlockModal').classList.add('open');
+}
+function closeUnlockModal(){
+  document.getElementById('unlockModal').classList.remove('open');
+}
 document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape') closeToolsModal();
+  if(e.key === 'Escape'){
+    closeToolsModal();
+    closeUnlockModal();
+  }
 });
 
 document.querySelectorAll('.quicknav a').forEach(link => {
@@ -640,6 +664,12 @@ document.querySelectorAll('.quicknav a').forEach(link => {
     this.classList.add('active');
     closeNav();
   });
+});
+
+window.addEventListener('scroll', function(){
+  if(window.scrollY < 80){
+    document.querySelectorAll('.quicknav a.active').forEach(el => el.classList.remove('active'));
+  }
 });
 
 function toggleNav(){

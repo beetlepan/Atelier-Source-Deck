@@ -610,6 +610,12 @@ document.querySelectorAll('.quicknav a').forEach(link => {
   });
 });
 
+window.addEventListener('scroll', function(){
+  if(window.scrollY < 80){
+    document.querySelectorAll('.quicknav a.active').forEach(el => el.classList.remove('active'));
+  }
+});
+
 function toggleNav(){
   const nav = document.getElementById('quicknav');
   const btn = document.getElementById('navToggle');
