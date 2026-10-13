@@ -39,5 +39,18 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "ASD 工具箱",
+      "short_name": "工具箱",
+      "url": "/toolkit.html",
+      "icons": [
+        {
+          "src": "icons/pwa-icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
   ]
 }

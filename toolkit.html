@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASD 工具箱｜ASD 工作室</title>
+<meta name="description" content="ASD 工具箱：常用軟體最新版本、問題自助排除教學、交機後檢查清單，以及聯絡方式。">
+<link rel="canonical" href="https://ateliersourcedeck.com/toolkit.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ASD 工具箱｜ASD 工作室">
+<meta property="og:description" content="常用軟體更新、教學自助排除、聯絡我們。">
+<meta property="og:image" content="https://ateliersourcedeck.com/icons/pwa-icon-512.png">
+<meta property="og:url" content="https://ateliersourcedeck.com/toolkit.html">
+<meta property="og:locale" content="zh_TW">
+<link rel="icon" type="image/x-icon" href="icons/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0A0C0E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0C0E;
+    --panel:#15181B;
+    --panel-alt:#1C2023;
+    --border:#2B3034;
+    --border-strong:#3E454A;
+    --ink:#ECEFF1;
+    --muted:#8B93A0;
+    --console-bg:#000000;
+    --console-line:#39FF6B;
+    --console-dim:#55605A;
+    --status-ok:#39FF6B;
+    --status-progress:#FFD166;
+    --status-error:#FF5F56;
+    --accent:#39FF6B;
+    --accent-ink:#07130A;
+    --radius:10px;
+    --radius-pill:999px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; overflow-x:clip; max-width:100%; scroll-padding-top:104px;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Noto Sans TC', sans-serif; -webkit-font-smoothing:antialiased;
+    overflow-x:clip; max-width:100%;
+  }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  [hidden]{ display:none !important; }
+
+  /* ---- Title bar ---- */
+  .site-header{ position:sticky; top:0; z-index:50; }
+  .titlebar{
+    position:relative; background:#101315; border-bottom:1px solid var(--border-strong);
+    display:flex; align-items:center; gap:10px; padding:8px 14px;
+  }
+  .dots{ display:flex; gap:6px; }
+  .dot{ width:10px; height:10px; border-radius:50%; background:#33393D; border:1px solid #454C51; }
+  .titlebar .app-name{ font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--muted); margin-left:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .conn{
+    margin-left:auto; display:flex; align-items:center; gap:6px;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--status-ok); white-space:nowrap;
+  }
+  .conn-dot{ width:8px; height:8px; border-radius:50%; background:var(--status-ok); box-shadow:0 0 0 3px rgba(46,125,70,0.15); }
+  .conn.off{ color:var(--status-progress); }
+  .conn.off .conn-dot{ background:var(--status-progress); box-shadow:0 0 0 3px rgba(255,209,102,0.15); }
+  .conn.err{ color:var(--status-error); }
+  .conn.err .conn-dot{ background:var(--status-error); box-shadow:0 0 0 3px rgba(255,95,86,0.15); }
+
+  .quicknav{
+    display:flex; gap:2px; overflow-x:auto; padding:0 10px;
+    background:#101315; border-bottom:1px solid var(--border); scrollbar-width:none;
+  }
+  .quicknav::-webkit-scrollbar{ display:none; }
+  .quicknav a{
+    white-space:nowrap; font-size:13px; color:var(--muted); text-decoration:none;
+    padding:10px 14px; border-right:1px solid var(--border); position:relative;
+    transition:color .15s ease, background .15s ease;
+  }
+  .quicknav a:last-child{ border-right:none; }
+  .quicknav a:hover{
+    color:var(--accent); background:rgba(255,255,255,0.06);
+    backdrop-filter:blur(10px) saturate(160%); -webkit-backdrop-filter:blur(10px) saturate(160%);
+  }
+  .quicknav a.active{ color:var(--accent); }
+  .quicknav a.active::after{
+    content:""; position:absolute; left:10px; right:10px; bottom:0; height:2px;
+    background:var(--accent); box-shadow:0 0 10px rgba(57,255,107,0.7);
+  }
+  .quicknav a .count{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; margin-left:6px;
+    padding:1px 6px; border-radius:var(--radius-pill); background:var(--accent); color:var(--accent-ink); font-weight:600;
+  }
+
+  .wrap{ max-width:880px; margin:0 auto; padding:0 16px; }
+
+  /* ---- Panel pattern ---- */
+  .panel{ background:var(--panel); border:1px solid var(--border); margin-top:18px; border-radius:var(--radius); overflow:hidden; }
+  .panel-head{
+    display:flex; align-items:center; gap:8px; padding:9px 14px;
+    background:var(--panel-alt); border-bottom:1px solid var(--border);
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.06em; color:var(--muted); text-transform:uppercase;
+  }
+  .panel-head .right{ margin-left:auto; text-transform:none; letter-spacing:0; }
+  .panel-body{ padding:22px; }
+
+  /* ---- Hero ---- */
+  .hero{ padding:34px 0 6px; position:relative; }
+  .hero::before{
+    content:""; position:absolute; inset:0 -16px; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(57,255,107,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(57,255,107,0.05) 1px, transparent 1px);
+    background-size:28px 28px;
+    -webkit-mask-image:linear-gradient(180deg, #000 0%, transparent 85%);
+            mask-image:linear-gradient(180deg, #000 0%, transparent 85%);
+  }
+  .hero > *{ position:relative; z-index:1; }
+  .hero .eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--accent); letter-spacing:.08em; margin-bottom:10px; }
+  .hero h1{ font-size:clamp(26px,4vw,36px); line-height:1.35; margin:0 0 14px; font-weight:900; }
+  .hero p{ color:var(--muted); font-size:15px; line-height:1.8; margin:0 0 18px; }
+
+  .btn{
+    font-family:'Noto Sans TC', sans-serif; font-size:14px; font-weight:500;
+    padding:11px 20px; border-radius:var(--radius-pill); border:1px solid var(--border-strong);
+    background:var(--panel-alt); color:var(--ink); text-decoration:none; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    transition:background .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease, backdrop-filter .15s ease;
+  }
+  .btn:hover{ background:rgba(255,255,255,0.08); border-color:var(--accent); backdrop-filter:blur(10px) saturate(160%); -webkit-backdrop-filter:blur(10px) saturate(160%); }
+  .btn:active{ background:#2A3B2E; border-color:var(--accent); transform:scale(0.97); box-shadow:0 0 0 4px rgba(57,255,107,0.18), 0 0 22px rgba(57,255,107,0.5); }
+  .btn.primary{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:700; }
+  .btn.primary:hover{ background:rgba(57,255,107,0.75); }
+  .btn.primary:active{ background:#5CFF8C; box-shadow:0 0 0 4px rgba(57,255,107,0.22), 0 0 26px rgba(57,255,107,0.65); }
+  .btn.small{ padding:7px 14px; font-size:13px; }
+  .btn:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .cta-row{ display:flex; flex-wrap:wrap; gap:10px; }
+
+  /* ---- Console ---- */
+  .console{
+    background:var(--console-bg); border-radius:var(--radius); padding:16px; min-height:120px;
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; line-height:1.9;
+    color:var(--console-line); overflow-x:auto; border:1px solid #0f1a12;
+    box-shadow:inset 0 0 40px rgba(57,255,107,0.04);
+  }
+  .console .ln{ white-space:pre-wrap; word-break:break-word; }
+  .console .dim{ color:var(--console-dim); }
+  .console .warn{ color:#E0B24E; }
+  .console .fail{ color:#E36B5C; }
+  .console .cursor{ display:inline-block; width:8px; height:14px; background:var(--console-line); vertical-align:-2px; margin-left:3px; animation:blink 1.1s steps(1) infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  /* ---- Memo (announcement) ---- */
+  .memo{
+    display:flex; gap:12px; align-items:flex-start; padding:14px 16px; margin-top:16px;
+    border:1px solid rgba(57,255,107,0.35); border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(57,255,107,0.08), rgba(57,255,107,0.02));
+    box-shadow:0 0 22px rgba(57,255,107,0.12);
+  }
+  .memo .tag{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--accent); border:1px solid var(--accent); border-radius:20px; padding:2px 8px; flex-shrink:0; margin-top:2px; }
+  .memo p{ margin:0; font-size:14px; line-height:1.75; }
+
+  /* ---- Toolbar (search + chips) ---- */
+  .toolbar{ display:flex; flex-direction:column; gap:12px; margin-top:18px; }
+  .search{
+    display:flex; align-items:center; gap:10px; background:var(--panel); border:1px solid var(--border-strong);
+    border-radius:var(--radius-pill); padding:0 16px; transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .search:focus-within{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(57,255,107,0.15); }
+  .search .prompt{ font-family:'IBM Plex Mono', monospace; color:var(--accent); font-size:14px; }
+  .search input{
+    flex:1; min-width:0; background:none; border:none; color:var(--ink);
+    font-family:'IBM Plex Mono', 'Noto Sans TC', monospace; font-size:14px; padding:12px 0; outline:none;
+  }
+  .search input::placeholder{ color:var(--muted); }
+  .search button{ background:none; border:none; color:var(--muted); cursor:pointer; font-size:16px; padding:4px; }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .chip{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted);
+    border:1px solid var(--border-strong); background:var(--panel-alt); border-radius:var(--radius-pill);
+    padding:6px 13px; cursor:pointer; transition:all .15s ease;
+  }
+  .chip:hover{ color:var(--ink); border-color:rgba(255,255,255,0.3); }
+  .chip[aria-pressed="true"]{ color:var(--accent-ink); background:var(--accent); border-color:var(--accent); font-weight:600; }
+  .chips .sep{ width:1px; height:18px; background:var(--border-strong); margin:0 4px; }
+
+  /* ---- Update cards ---- */
+  .updates-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; }
+  .update-card{
+    position:relative; border:1px solid var(--border); border-radius:var(--radius); padding:16px;
+    background:var(--panel-alt); display:flex; flex-direction:column;
+    transition:border-color .15s ease, background .15s ease, box-shadow .15s ease, transform .15s ease;
+  }
+  .update-card:hover{ border-color:rgba(255,255,255,0.22); background:rgba(255,255,255,0.05); transform:translateY(-1px); }
+  .update-card.is-new{ border-color:rgba(57,255,107,0.55); box-shadow:0 0 0 1px rgba(57,255,107,0.25), 0 0 22px rgba(57,255,107,0.18); }
+  .update-card .top{ display:flex; align-items:flex-start; gap:8px; margin-bottom:6px; }
+  .update-card h4{ margin:0; font-size:16px; line-height:1.4; flex:1; }
+  .badge{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; font-weight:600; letter-spacing:.06em;
+    padding:2px 8px; border-radius:var(--radius-pill); flex-shrink:0; margin-top:2px;
+  }
+  .badge.new{ background:var(--accent); color:var(--accent-ink); animation:pulse 2.4s ease-in-out infinite; }
+  .badge.cat{ color:var(--muted); border:1px solid var(--border-strong); }
+  @keyframes pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(57,255,107,0.5); } 50%{ box-shadow:0 0 0 6px rgba(57,255,107,0); } }
+  .update-card .meta{
+    display:flex; flex-wrap:wrap; gap:4px 14px; align-items:center;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--muted); margin-bottom:10px;
+  }
+  .update-card .meta .ver{ color:var(--accent); }
+  .update-card .desc{ font-size:13px; color:var(--muted); line-height:1.65; margin:0 0 14px; }
+  .update-card .warn{
+    font-size:12.5px; line-height:1.6; margin:-2px 0 14px; padding:8px 10px;
+    color:#FFD166; background:rgba(255,209,102,0.08); border:1px solid rgba(255,209,102,0.3); border-radius:8px;
+  }
+  .update-card .btn-row{ display:flex; gap:10px; margin-top:auto; }
+  .update-card .btn-row .btn{ flex:1; }
+
+  /* ---- Guides ---- */
+  .guide{ border-bottom:1px solid var(--border); }
+  .guide:last-child{ border-bottom:none; }
+  .guide-q{
+    width:100%; text-align:left; background:none; border:none; cursor:pointer; color:var(--ink);
+    padding:16px 10px; display:flex; align-items:flex-start; gap:12px; border-radius:var(--radius);
+    font-family:'Noto Sans TC', sans-serif; transition:background .15s ease, box-shadow .15s ease;
+  }
+  .guide-q:hover{ background:rgba(255,255,255,0.05); }
+  .guide-q .g-main{ flex:1; min-width:0; }
+  .guide-q .g-title{ font-size:14.5px; font-weight:500; line-height:1.55; display:block; }
+  .guide-q .g-sum{ display:block; font-size:12.5px; color:var(--muted); margin-top:4px; line-height:1.6; }
+  .guide-q .g-tags{ display:flex; gap:6px; margin-bottom:6px; flex-wrap:wrap; }
+  .tag{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--accent);
+    border:1px solid var(--accent); border-radius:20px; padding:2px 8px;
+  }
+  .tag.dev{ color:var(--muted); border-color:var(--border-strong); }
+  .plus{ font-family:'IBM Plex Mono', monospace; color:var(--accent); font-size:18px; flex-shrink:0; transition:transform .2s ease; line-height:1.2; }
+  .guide.open .guide-q{ background:rgba(57,255,107,0.08); box-shadow:0 0 0 1px rgba(57,255,107,0.3), 0 0 18px rgba(57,255,107,0.2); }
+  .guide.open .plus{ transform:rotate(45deg); }
+  .guide-a{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .28s ease; }
+  .guide-a > div{ overflow:hidden; }
+  .guide.open .guide-a{ grid-template-rows:1fr; }
+  .guide-a .inner{ padding:8px 10px 18px; }
+
+  .steps{ list-style:none; margin:0; padding:0; counter-reset:step; }
+  .step{ counter-increment:step; display:flex; gap:14px; padding:12px 0; border-bottom:1px dashed var(--border); }
+  .step:last-child{ border-bottom:none; }
+  .step::before{
+    content:counter(step,decimal-leading-zero); font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--accent);
+    background:var(--panel-alt); border:1px solid var(--border); width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .step h5{ margin:0 0 3px; font-size:14.5px; font-weight:700; }
+  .step p{ margin:0; color:var(--muted); font-size:13.5px; line-height:1.65; }
+  .guide-links{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+
+  /* ---- Checklist ---- */
+  .progress{ height:6px; background:var(--panel-alt); border-radius:var(--radius-pill); overflow:hidden; border:1px solid var(--border); margin-bottom:16px; }
+  .progress > i{ display:block; height:100%; width:0; background:var(--accent); box-shadow:0 0 12px rgba(57,255,107,0.6); transition:width .3s ease; }
+  .check{
+    display:flex; align-items:flex-start; gap:12px; padding:12px 10px; cursor:pointer; border-radius:var(--radius);
+    border-bottom:1px dashed var(--border); transition:background .15s ease;
+  }
+  .check:last-child{ border-bottom:none; }
+  .check:hover{ background:rgba(255,255,255,0.04); }
+  .check input{ position:absolute; opacity:0; pointer-events:none; }
+  .check .box{
+    width:20px; height:20px; border:1.5px solid var(--border-strong); border-radius:6px; flex-shrink:0; margin-top:1px;
+    display:flex; align-items:center; justify-content:center; color:transparent; font-size:13px; font-weight:900;
+    transition:all .15s ease;
+  }
+  .check input:checked + .box{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); box-shadow:0 0 12px rgba(57,255,107,0.5); }
+  .check input:focus-visible + .box{ outline:2px solid var(--accent); outline-offset:2px; }
+  .check .txt{ font-size:14px; line-height:1.6; }
+  .check input:checked ~ .txt{ color:var(--muted); text-decoration:line-through; text-decoration-color:var(--border-strong); }
+
+  /* ---- Report form ---- */
+  .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field.full{ grid-column:1 / -1; }
+  .field label{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--muted); letter-spacing:.04em; }
+  .field input, .field textarea{
+    font-family:'Noto Sans TC', sans-serif; font-size:14px; padding:10px 12px;
+    border:1px solid var(--border-strong); border-radius:var(--radius); background:var(--panel-alt); color:var(--ink); width:100%;
+  }
+  .field textarea{ min-height:84px; resize:vertical; line-height:1.6; }
+  .field input::placeholder, .field textarea::placeholder{ color:var(--muted); }
+  .report-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+  .toast{
+    position:fixed; left:50%; bottom:24px; transform:translate(-50%, 20px); opacity:0; pointer-events:none;
+    background:var(--accent); color:var(--accent-ink); font-weight:700; font-size:14px;
+    padding:10px 20px; border-radius:var(--radius-pill); box-shadow:0 0 24px rgba(57,255,107,0.5);
+    transition:all .25s ease; z-index:100;
+  }
+  .toast.show{ opacity:1; transform:translate(-50%, 0); }
+
+  .contact-grid{ display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+  .contact-card{ flex:1; min-width:150px; border:1px solid var(--border); border-radius:var(--radius); padding:14px; text-align:center; background:var(--panel-alt); }
+  .contact-card .label{ font-size:12.5px; color:var(--muted); margin-bottom:8px; }
+
+  .empty{ text-align:center; padding:34px 10px; color:var(--muted); font-size:13.5px; line-height:1.8; }
+  .empty .mono{ color:var(--accent); display:block; margin-bottom:6px; }
+
+  .updates-subhead{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent); letter-spacing:0.06em; margin:0 0 12px; }
+  .updates-divider{ border:none; border-top:1px solid var(--border); margin:26px 0; }
+
+  footer{ text-align:center; color:var(--muted); font-size:12px; padding:30px 16px 50px; font-family:'IBM Plex Mono', monospace; line-height:1.9; }
+  footer a{ color:var(--muted); }
+
+  /* scroll reveal */
+  .reveal{ opacity:0; transform:translateY(10px); transition:opacity .45s ease, transform .45s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  @media (max-width:680px){
+    .wrap{ padding:0 14px; }
+    .panel-body{ padding:16px; }
+    .hero{ padding:28px 0 4px; }
+    .hero::before{ inset:0 -14px; }
+    .hero .eyebrow{ font-size:11.5px; }
+    .hero h1{ font-size:23px; line-height:1.45; }
+    .hero p{ font-size:14px; line-height:1.75; }
+    .cta-row{ display:grid; grid-template-columns:1fr 1fr; }
+    .console{ font-size:12px; padding:14px; }
+    .form-grid{ grid-template-columns:1fr; }
+    .updates-grid{ grid-template-columns:1fr; }
+    .step{ gap:12px; }
+    .step::before{ width:30px; height:30px; font-size:12px; }
+    .contact-card{ min-width:0; flex-basis:100%; }
+    .titlebar .app-name{ font-size:12px; }
+    html{ scroll-padding-top:96px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .guide-a, .reveal, .progress > i, .toast{ transition:none; }
+    .badge.new, .console .cursor{ animation:none; }
+    .reveal{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="titlebar">
+      <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <span class="app-name">ASD 工作室 — ASD 工具箱</span>
+      <div class="conn" id="conn" role="status" aria-live="polite"><span class="conn-dot"></span><span id="connText">連線中…</span></div>
+    </div>
+    <nav class="quicknav" id="quicknav" aria-label="工具包分頁">
+      <a href="index.html">← 首頁</a>
+      <a href="#updates">軟體更新<span class="count" id="newCount" hidden></span></a>
+      <a href="#guides">教學</a>
+      <a href="#checklist">交機檢查</a>
+      <a href="#report">聯絡</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+
+    <section class="hero">
+      <div class="eyebrow">ASD TOOLBOX — ASD 工具箱</div>
+      <h1>更新、教學、聯絡，<br>都在這一頁。</h1>
+      <p>常用軟體的最新版本、遇到問題的逐步排除方式，和交機後的檢查清單。內容由工作室持續維護，加入主畫面後，離線也能查教學。</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#updates">看軟體更新</a>
+        <a class="btn" href="#guides">查教學</a>
+        <button class="btn" id="installBtn" type="button" hidden>加入主畫面</button>
+      </div>
+    </section>
+
+    <div class="memo" id="memo" hidden>
+      <span class="tag">公告</span>
+      <p id="memoText"></p>
+    </div>
+
+    <section class="panel reveal" style="margin-top:18px;">
+      <div class="panel-head">SYSTEM — 狀態</div>
+      <div class="panel-body" style="padding:14px;">
+        <div class="console" id="console" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <div class="toolbar">
+      <label class="search">
+        <span class="prompt">&gt;</span>
+        <input id="q" type="search" placeholder="搜尋軟體或問題，例如 Magisk、三星、銀行" autocomplete="off" enterkeyhint="search" aria-label="搜尋軟體或教學">
+        <button id="qClear" type="button" aria-label="清除搜尋" hidden>✕</button>
+      </label>
+    </div>
+
+    <section id="updates" class="panel reveal">
+      <div class="panel-head">UPDATES — 軟體更新 <span class="right mono" id="updatedAt"></span></div>
+      <div class="panel-body">
+        <div class="chips" id="chips" role="group" aria-label="篩選軟體分類"></div>
+        <div id="updatesList" style="margin-top:16px;"></div>
+      </div>
+    </section>
+
+    <section id="guides" class="panel reveal">
+      <div class="panel-head">GUIDES — 問題自助排除 <span class="right mono" id="guideCount"></span></div>
+      <div class="panel-body" style="padding:8px 12px 12px;">
+        <div id="guidesList"></div>
+      </div>
+    </section>
+
+    <section id="checklist" class="panel reveal">
+      <div class="panel-head">CHECKLIST — 交機後檢查 <span class="right mono" id="checkCount"></span></div>
+      <div class="panel-body">
+        <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+        <div id="checkList"></div>
+        <p style="font-size:12px; color:var(--muted); margin:14px 0 0;">勾選狀態只存在這支手機的瀏覽器裡，不會上傳。</p>
+      </div>
+    </section>
+
+    <section id="report" class="panel reveal">
+      <div class="panel-head">CONTACT — 聯絡我們</div>
+      <div class="panel-body">
+        <p style="margin:0 0 16px; font-size:13.5px; color:var(--muted); line-height:1.75;">聯絡前請先看過「教學」，找不到答案再透過 Threads 或 Email 聯絡我們。填好下面幾格，下方的內容會即時整理好，複製後貼給我們，能省去來回確認的時間。機型與系統版本會盡量自動帶入，不準時請自行修改。</p>
+        <div class="form-grid">
+          <div class="field"><label for="fOrder">ORDER — 訂單編號</label><input id="fOrder" autocomplete="off" placeholder="例如 ASD-0001"></div>
+          <div class="field"><label for="fModel">MODEL — 手機機型</label><input id="fModel" autocomplete="off" placeholder="例如 Poco F5"></div>
+          <div class="field"><label for="fOs">SYSTEM — 系統版本</label><input id="fOs" autocomplete="off" placeholder="例如 Android 14 / HyperOS 1.0"></div>
+          <div class="field"><label for="fApp">APP — 出問題的 App（選填）</label><input id="fApp" autocomplete="off" placeholder="例如 某某銀行 App"></div>
+          <div class="field full"><label for="fDesc">ISSUE — 發生什麼事</label><textarea id="fDesc" placeholder="什麼時候開始、做了什麼操作、畫面顯示什麼訊息"></textarea></div>
+        </div>
+        <div class="console" id="reportPreview" style="min-height:0;" aria-label="回報內容預覽"></div>
+        <div class="report-actions">
+          <button class="btn primary" id="copyBtn" type="button">複製回報內容</button>
+          <a class="btn" id="mailBtn" href="#">用 Email 寄出</a>
+        </div>
+        <div class="contact-grid" id="contactGrid"></div>
+        <p style="font-size:12px; color:var(--muted); margin:14px 0 0;">遇到畫面異常或磚機，請記得另外拍照或錄影，一起附上。</p>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    ASD 工作室 ／ <a href="mailto:ateliersourcedeck@gmail.com">ateliersourcedeck@gmail.com</a><br>
+    <a href="support.html">售後支援</a> · <a href="index.html">首頁</a>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  'use strict';
+  var $ = function(s, r){ return (r||document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function store(key, val){
+    try{
+      if(val === undefined){ var v = localStorage.getItem(key); return v ? JSON.parse(v) : null; }
+      localStorage.setItem(key, JSON.stringify(val));
+    }catch(e){ return null; }
+  }
+  function h(tag, attrs){
+    var el = document.createElement(tag);
+    if(attrs){ Object.keys(attrs).forEach(function(k){
+      var v = attrs[k];
+      if(v == null || v === false) return;
+      if(k === 'class') el.className = v;
+      else if(k === 'text') el.textContent = v;
+      else if(k.slice(0,2) === 'on') el.addEventListener(k.slice(2), v);
+      else el.setAttribute(k, v === true ? '' : v);
+    }); }
+    for(var i = 2; i < arguments.length; i++){
+      var c = arguments[i];
+      if(c == null || c === false) continue;
+      el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    }
+    return el;
+  }
+  function safeUrl(u){
+    try{ var x = new URL(u, location.href); return /^https?:$/.test(x.protocol) ? x.href : null; }catch(e){ return null; }
+  }
+  function linkBtn(l, extra){
+    var href = safeUrl(l.url);
+    if(!href) return null;
+    return h('a', { href: href, target: '_blank', rel: 'noopener', 'class': 'btn' + (l.primary ? ' primary' : '') + (extra ? ' ' + extra : ''), text: l.label });
+  }
+  function toast(msg){
+    var t = $('#toast'); t.textContent = msg; t.classList.add('show');
+    clearTimeout(toast._t); toast._t = setTimeout(function(){ t.classList.remove('show'); }, 1800);
+  }
+  function daysAgo(iso){
+    var d = new Date(iso + 'T00:00:00'); if(isNaN(d)) return '';
+    var n = Math.floor((Date.now() - d.getTime()) / 86400000);
+    if(n < 0) return '';
+    if(n === 0) return '今天';
+    if(n < 31) return n + ' 天前';
+    if(n < 365) return Math.floor(n / 30) + ' 個月前';
+    return Math.floor(n / 365) + ' 年前';
+  }
+
+  /* ---------- Console (boot log) ---------- */
+  var con = $('#console'), cursorEl = null, queue = [], running = false;
+  function logLine(text, cls){
+    queue.push([text, cls || '']); if(!running) pump();
+  }
+  function pump(){
+    running = true;
+    var item = queue.shift();
+    if(!item){ running = false; return; }
+    if(cursorEl) cursorEl.remove();
+    con.appendChild(h('div', { 'class': 'ln ' + item[1], text: item[0] }));
+    cursorEl = h('span', { 'class': 'cursor' });
+    con.lastChild.appendChild(cursorEl);
+    if(reduceMotion) pump(); else setTimeout(pump, 170);
+  }
+
+  /* ---------- Connection indicator ---------- */
+  function setConn(state, text){
+    var c = $('#conn'); c.className = 'conn' + (state ? ' ' + state : '');
+    $('#connText').textContent = text;
+  }
+
+  /* ---------- Device detection (best-effort) ---------- */
+  function detectDevice(){
+    var out = { model: '', os: '' };
+    var ua = navigator.userAgent || '';
+    var m = ua.match(/Android\s([\d.]+)/); if(m) out.os = 'Android ' + m[1];
+    var mm = ua.match(/Android[^;]*;\s([^;)]+?)(?:\sBuild|\))/);
+    if(mm && mm[1] && mm[1] !== 'K' && !/^Linux/.test(mm[1])) out.model = mm[1].trim();
+    var p = Promise.resolve();
+    if(navigator.userAgentData && navigator.userAgentData.getHighEntropyValues){
+      p = navigator.userAgentData.getHighEntropyValues(['model', 'platformVersion']).then(function(v){
+        if(v.model) out.model = v.model;
+        if(v.platformVersion && /android/i.test(navigator.userAgentData.platform || '')) out.os = 'Android ' + String(v.platformVersion).split('.')[0];
+      }).catch(function(){});
+    }
+    return p.then(function(){ return out; });
+  }
+
+  /* ---------- Render: updates ---------- */
+  var DATA = null, state = { cat: 'all', onlyNew: false, q: '' }, newIds = {};
+
+  function stamp(u){ return (u.version || '') + '|' + (u.date || ''); }
+  function computeNew(){
+    var seen = store('asd.toolkit.seen.v1'), ids = {}, n = 0;
+    if(seen){
+      DATA.updates.forEach(function(u){
+        if(seen[u.id] === undefined || seen[u.id] !== stamp(u)){ ids[u.id] = true; n++; }
+      });
+    }
+    var snap = {}; DATA.updates.forEach(function(u){ snap[u.id] = stamp(u); });
+    store('asd.toolkit.seen.v1', snap);
+    newIds = ids; return n;
+  }
+  function matches(text){
+    if(!state.q) return true;
+    return text.toLowerCase().indexOf(state.q.toLowerCase()) !== -1;
+  }
+  function catLabel(id){
+    var c = DATA.categories.filter(function(x){ return x.id === id; })[0]; return c ? c.label : id;
+  }
+
+  function renderChips(){
+    var box = $('#chips'); box.textContent = '';
+    function chip(label, active, fn){
+      var b = h('button', { 'class': 'chip', type: 'button', 'aria-pressed': active ? 'true' : 'false', text: label, onclick: fn });
+      box.appendChild(b);
+    }
+    chip('全部', state.cat === 'all', function(){ state.cat = 'all'; renderUpdates(); renderChips(); });
+    DATA.categories.forEach(function(c){
+      chip(c.label, state.cat === c.id, function(){ state.cat = c.id; renderUpdates(); renderChips(); });
+    });
+    if(Object.keys(newIds).length){
+      box.appendChild(h('span', { 'class': 'sep' }));
+      chip('只看有更新', state.onlyNew, function(){ state.onlyNew = !state.onlyNew; renderUpdates(); renderChips(); });
+    }
+  }
+
+  function renderUpdates(){
+    var list = $('#updatesList'); list.textContent = '';
+    var items = DATA.updates.filter(function(u){
+      if(state.cat !== 'all' && u.cat !== state.cat) return false;
+      if(state.onlyNew && !newIds[u.id]) return false;
+      return matches([u.name, u.author, u.desc, u.version].join(' '));
+    });
+    if(!items.length){
+      list.appendChild(h('div', { 'class': 'empty' }, h('span', { 'class': 'mono', text: '> no match' }), '找不到符合的軟體，換個關鍵字試試。'));
+      return;
+    }
+    var groups = state.cat === 'all' ? DATA.categories : DATA.categories.filter(function(c){ return c.id === state.cat; });
+    groups.forEach(function(g, gi){
+      var gi_items = items.filter(function(u){ return u.cat === g.id; });
+      if(!gi_items.length) return;
+      if(list.childNodes.length) list.appendChild(h('hr', { 'class': 'updates-divider' }));
+      list.appendChild(h('div', { 'class': 'updates-subhead', text: g.label + ' 相關' }));
+      var grid = h('div', { 'class': 'updates-grid' });
+      gi_items.forEach(function(u){ grid.appendChild(updateCard(u)); });
+      list.appendChild(grid);
+    });
+  }
+
+  function linkNote(u){
+    var types = (u.links || []).map(function(l){ return l.linkType; });
+    var t = '';
+    if(types.indexOf('module-zip') >= 0) t = 'Root 模組（zip）：下載後到 Root 管理器 → 模組 → 從儲存空間安裝，完成後重新開機。';
+    else if(types.indexOf('apk-direct') >= 0) t = '點下載會直接取得 APK，完成後點通知安裝；若被擋住，請允許瀏覽器「安裝未知來源應用程式」。';
+    return t ? h('div', { 'class': 'desc', style: 'font-size:12px;margin-top:8px;', text: t }) : null;
+  }
+
+  function updateCard(u){
+    var meta = h('div', { 'class': 'meta' });
+    var parts = [];
+    if(u.author) parts.push(h('span', { text: u.author }));
+    if(u.version) parts.push(h('span', { 'class': 'ver', text: u.version }));
+    if(u.date){ var ago = daysAgo(u.date); parts.push(h('span', { text: u.date + (ago ? '（' + ago + '）' : '') })); }
+    if(u.stars) parts.push(h('span', { text: '⭐ ' + u.stars }));
+    parts.forEach(function(p){ meta.appendChild(p); });
+
+    var row = h('div', { 'class': 'btn-row' });
+    (u.links || []).forEach(function(l){ var b = linkBtn(l); if(b) row.appendChild(b); });
+
+    return h('div', { 'class': 'update-card' + (newIds[u.id] ? ' is-new' : '') },
+      h('div', { 'class': 'top' },
+        h('h4', { text: u.name }),
+        newIds[u.id] ? h('span', { 'class': 'badge new', text: 'NEW' }) : null
+      ),
+      meta,
+      h('p', { 'class': 'desc', text: u.desc }),
+      u.warn ? h('div', { 'class': 'warn', text: '⚠️ ' + u.warn }) : null,
+      linkNote(u),
+      row
+    );
+  }
+
+  /* ---------- Render: guides ---------- */
+  function renderGuides(){
+    var list = $('#guidesList'); list.textContent = '';
+    var items = DATA.guides.filter(function(g){
+      return matches([g.title, g.summary, g.tag, g.device || '', (g.steps || []).map(function(s){ return s.t + ' ' + s.d; }).join(' ')].join(' '));
+    });
+    $('#guideCount').textContent = items.length + ' / ' + DATA.guides.length;
+    if(!items.length){
+      list.appendChild(h('div', { 'class': 'empty' }, h('span', { 'class': 'mono', text: '> no match' }), '沒有符合的教學。可以到「聯絡」整理資訊，直接聯絡我們。'));
+      return;
+    }
+    items.forEach(function(g){
+      var tags = h('div', { 'class': 'g-tags' }, h('span', { 'class': 'tag', text: g.tag }));
+      if(g.device) tags.appendChild(h('span', { 'class': 'tag dev', text: g.device }));
+
+      var steps = h('ol', { 'class': 'steps' });
+      (g.steps || []).forEach(function(s){
+        steps.appendChild(h('li', { 'class': 'step' }, h('div', null, h('h5', { text: s.t }), h('p', { text: s.d }))));
+      });
+      var links = h('div', { 'class': 'guide-links' });
+      (g.links || []).forEach(function(l){ var b = linkBtn(l, 'small'); if(b) links.appendChild(b); });
+
+      var panelId = 'g-' + g.id;
+      var q = h('button', { 'class': 'guide-q', type: 'button', 'aria-expanded': 'false', 'aria-controls': panelId },
+        h('span', { 'class': 'g-main' }, tags, h('span', { 'class': 'g-title', text: g.title }), h('span', { 'class': 'g-sum', text: g.summary })),
+        h('span', { 'class': 'plus', text: '＋' })
+      );
+      var inner = h('div', { 'class': 'inner' }, steps, links.childNodes.length ? links : null);
+      var a = h('div', { 'class': 'guide-a', id: panelId, role: 'region' }, h('div', null, inner));
+      var item = h('div', { 'class': 'guide', 'data-id': g.id }, q, a);
+      q.addEventListener('click', function(){
+        var open = item.classList.contains('open');
+        $$('.guide.open').forEach(function(el){ el.classList.remove('open'); $('.guide-q', el).setAttribute('aria-expanded', 'false'); });
+        if(!open){
+          item.classList.add('open'); q.setAttribute('aria-expanded', 'true');
+          try{ history.replaceState(null, '', '#guide-' + g.id); }catch(e){}
+        }
+      });
+      list.appendChild(item);
+    });
+    if(state.q && items.length <= 3){ var first = $('.guide', list); if(first) $('.guide-q', first).click(); }
+  }
+
+  function openGuideFromHash(){
+    var m = location.hash.match(/^#guide-(.+)$/); if(!m) return;
+    var el = $('.guide[data-id="' + m[1].replace(/[^\w-]/g, '') + '"]');
+    if(el){ if(!el.classList.contains('open')) $('.guide-q', el).click(); setTimeout(function(){ el.scrollIntoView({ block: 'start' }); }, 50); }
+  }
+
+  /* ---------- Render: checklist ---------- */
+  function renderChecklist(){
+    var saved = store('asd.toolkit.check.v1') || {};
+    var list = $('#checkList'); list.textContent = '';
+    function refresh(){
+      var n = DATA.checklist.filter(function(c){ return saved[c.id]; }).length, t = DATA.checklist.length;
+      $('#checkCount').textContent = n + ' / ' + t;
+      $('#progressBar').style.width = (t ? n / t * 100 : 0) + '%';
+    }
+    DATA.checklist.forEach(function(c){
+      var input = h('input', { type: 'checkbox', id: 'c-' + c.id });
+      input.checked = !!saved[c.id];
+      input.addEventListener('change', function(){ saved[c.id] = input.checked; store('asd.toolkit.check.v1', saved); refresh(); });
+      list.appendChild(h('label', { 'class': 'check' }, input, h('span', { 'class': 'box', 'aria-hidden': 'true', text: '✓' }), h('span', { 'class': 'txt', text: c.text })));
+    });
+    refresh();
+  }
+
+  /* ---------- Report ---------- */
+  var F = {};
+  function reportText(){
+    var lines = [
+      '【ASD 工作室 回報】',
+      '訂單編號：' + (F.order.value.trim() || '（未填）'),
+      '手機機型：' + (F.model.value.trim() || '（未填）'),
+      '系統版本：' + (F.os.value.trim() || '（未填）')
+    ];
+    if(F.app.value.trim()) lines.push('出問題的 App：' + F.app.value.trim());
+    lines.push('狀況描述：' + (F.desc.value.trim() || '（未填）'));
+    return lines.join('\n');
+  }
+  function updateReport(){
+    var t = reportText();
+    var pv = $('#reportPreview'); pv.textContent = '';
+    t.split('\n').forEach(function(l, i){ pv.appendChild(h('div', { 'class': 'ln' + (i === 0 ? ' dim' : ''), text: l })); });
+    var subject = 'ASD 回報' + (F.order.value.trim() ? ' ' + F.order.value.trim() : '');
+    $('#mailBtn').href = 'mailto:' + (DATA && DATA.contact && DATA.contact.email || 'ateliersourcedeck@gmail.com') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(t);
+    store('asd.toolkit.form.v1', { order: F.order.value, model: F.model.value, os: F.os.value });
+  }
+  function initReport(){
+    F = { order: $('#fOrder'), model: $('#fModel'), os: $('#fOs'), app: $('#fApp'), desc: $('#fDesc') };
+    var saved = store('asd.toolkit.form.v1') || {};
+    if(saved.order) F.order.value = saved.order;
+    if(saved.model) F.model.value = saved.model;
+    if(saved.os) F.os.value = saved.os;
+    detectDevice().then(function(d){
+      if(!F.model.value && d.model) F.model.value = d.model;
+      if(!F.os.value && d.os) F.os.value = d.os;
+      updateReport();
+      logLine('> 裝置：' + (d.model || '機型未偵測') + ' / ' + (d.os || '系統未偵測'), 'dim');
+    });
+    Object.keys(F).forEach(function(k){ F[k].addEventListener('input', updateReport); });
+    $('#copyBtn').addEventListener('click', function(){
+      var t = reportText();
+      function done(){ toast('已複製，貼給我們即可'); }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(t).then(done, fallback);
+      }else fallback();
+      function fallback(){
+        var ta = h('textarea', { style: 'position:fixed;opacity:0' }); ta.value = t; document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); done(); }catch(e){ toast('請長按內容手動複製'); }
+        ta.remove();
+      }
+    });
+    var c = DATA.contact || {}, grid = $('#contactGrid'); grid.textContent = '';
+    function card(label, link){ if(!link) return; grid.appendChild(h('div', { 'class': 'contact-card' }, h('div', { 'class': 'label', text: label }), link)); }
+    if(c.threads) card('Threads', linkBtn({ label: '@asdasdinx55', url: c.threads, primary: true }, 'small'));
+    if(c.email) card('Email', h('a', { href: 'mailto:' + c.email, 'class': 'btn small', text: c.email }));
+    updateReport();
+  }
+
+  /* ---------- Search ---------- */
+  function initSearch(){
+    var q = $('#q'), clear = $('#qClear'), t;
+    q.addEventListener('input', function(){
+      clearTimeout(t);
+      t = setTimeout(function(){
+        state.q = q.value.trim(); clear.hidden = !state.q;
+        renderUpdates(); renderGuides();
+      }, 120);
+    });
+    clear.addEventListener('click', function(){ q.value = ''; state.q = ''; clear.hidden = true; renderUpdates(); renderGuides(); q.focus(); });
+  }
+
+  /* ---------- Scroll spy + reveal ---------- */
+  function initSpy(){
+    var links = $$('.quicknav a[href^="#"]');
+    var secs = links.map(function(a){ return $(a.getAttribute('href')); });
+    function onScroll(){
+      var y = window.scrollY + 140, cur = -1;
+      secs.forEach(function(s, i){ if(s && s.offsetTop <= y) cur = i; });
+      if(window.scrollY < 80) cur = -1;
+      links.forEach(function(a, i){ a.classList.toggle('active', i === cur); });
+      if(cur >= 0){
+        var nav = $('#quicknav'), l = links[cur];
+        var left = l.offsetLeft - (nav.clientWidth - l.offsetWidth) / 2;
+        if(Math.abs(nav.scrollLeft - left) > 4) nav.scrollLeft = Math.max(0, left);
+      }
+    }
+    var tick = false;
+    window.addEventListener('scroll', function(){ if(tick) return; tick = true; requestAnimationFrame(function(){ onScroll(); tick = false; }); }, { passive: true });
+    if('IntersectionObserver' in window && !reduceMotion){
+      var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -8% 0px' });
+      $$('.reveal').forEach(function(el){ io.observe(el); });
+    }else{ $$('.reveal').forEach(function(el){ el.classList.add('in'); }); }
+  }
+
+  /* ---------- Install prompt ---------- */
+  var deferred = null;
+  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred = e; $('#installBtn').hidden = false; });
+  $('#installBtn').addEventListener('click', function(){
+    if(!deferred) return; deferred.prompt();
+    deferred.userChoice.finally(function(){ deferred = null; $('#installBtn').hidden = true; });
+  });
+  window.addEventListener('appinstalled', function(){ $('#installBtn').hidden = true; });
+
+  window.addEventListener('online', function(){ setConn('', '連線正常'); });
+  window.addEventListener('offline', function(){ setConn('off', '離線模式'); });
+
+  /* ---------- Boot ---------- */
+  logLine('> asd-toolkit --boot', 'dim');
+  logLine('> 讀取 toolkit.json …');
+
+  fetch('toolkit.json', { cache: 'no-cache' })
+    .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(data){
+      DATA = data;
+      setConn(navigator.onLine ? '' : 'off', navigator.onLine ? '連線正常' : '離線模式');
+      var n = computeNew();
+      logLine('> 載入完成：' + data.updates.length + ' 項軟體、' + data.guides.length + ' 篇教學  [OK]');
+      if(n) logLine('> 自上次造訪有 ' + n + ' 項軟體更新', 'warn');
+      else if(store('asd.toolkit.seen.v1')) logLine('> 沒有新的軟體更新');
+      else logLine('> 歡迎第一次使用，之後有更新會在這裡提醒你', 'dim');
+      if(data.updated) $('#updatedAt').textContent = '內容更新 ' + data.updated;
+      if(data.memo){ $('#memoText').textContent = data.memo; $('#memo').hidden = false; }
+      if(n){ var nc = $('#newCount'); nc.textContent = n; nc.hidden = false; }
+      renderChips(); renderUpdates(); renderGuides(); renderChecklist(); initReport(); initSearch(); initSpy();
+      openGuideFromHash();
+    })
+    .catch(function(err){
+      setConn('err', navigator.onLine ? '載入失敗' : '離線模式');
+      logLine('> 讀取失敗：' + err.message, 'fail');
+      logLine(navigator.onLine ? '> 請稍後重新整理，或直接聯絡工作室。' : '> 目前離線，且尚無快取。連上網路後重新整理即可。', 'warn');
+      $$('.reveal').forEach(function(el){ el.classList.add('in'); });
+    });
+
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); });
+  }
+})();
+</script>
+
+</body>
+</html>
