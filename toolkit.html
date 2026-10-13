@@ -16,7 +16,6 @@
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0A0C0E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -359,11 +358,11 @@
     <section class="hero">
       <div class="eyebrow">ASD TOOLBOX — ASD 工具箱</div>
       <h1>更新、教學、聯絡，<br>都在這一頁。</h1>
-      <p>常用軟體的最新版本，和遇到問題的逐步排除方式。內容由工作室持續維護，加入主畫面後，離線也能查教學。</p>
+      <p>常用軟體的最新版本，和遇到問題的逐步排除方式。內容由工作室持續維護。Android 手機可安裝 ASD 工具箱 App，直接在手機上查看。</p>
       <div class="cta-row">
         <a class="btn primary" href="#updates">看軟體更新</a>
         <a class="btn" href="#guides">查教學</a>
-        <button class="btn" id="installBtn" type="button" hidden>加入主畫面</button>
+        <a class="btn" id="appBtn" href="#app">安裝 ASD 工具箱 App</a>
       </div>
     </section>
 
@@ -386,6 +385,22 @@
         <button id="qClear" type="button" aria-label="清除搜尋" hidden>✕</button>
       </label>
     </div>
+
+    <section id="app" class="panel reveal">
+      <div class="eyebrow">APP — 安裝工具箱</div>
+      <h2 style="margin:6px 0 10px;">安裝 ASD 工具箱 App（Android）</h2>
+      <p id="appNote">App 內含軟體版本偵測、教學、手機設定捷徑，不需要透過瀏覽器開啟網站。目前僅支援 Android 手機；iPhone 請直接使用本頁。</p>
+      <div class="cta-row" style="margin:14px 0;">
+        <a class="btn primary" id="apkBtn" href="https://github.com/beetlepan/asd-toolbox/releases/latest/download/ASD-Toolbox.apk">下載 ASD 工具箱（APK）</a>
+      </div>
+      <ol style="padding-left:20px;line-height:1.9;">
+        <li>點上方按鈕下載 APK（瀏覽器若提示「這類檔案可能有害」，選「仍要下載」）。</li>
+        <li>下載完成後點開檔案；系統若提示「不允許安裝未知來源應用程式」，點「設定」，開啟該瀏覽器（或檔案管理員）的「允許安裝」。</li>
+        <li>返回後點「安裝」。若出現 Play 保護機制警告，選「仍要安裝」（App 為工作室自行發佈，不經 Play 商店）。</li>
+        <li>安裝完成後，從桌面開啟「ASD 工具箱」。之後軟體版本與教學會自動更新，不需重裝。</li>
+      </ol>
+      <p style="opacity:.7;font-size:13px;">安裝完成後，可到手機設定關閉瀏覽器的「安裝未知來源」權限。</p>
+    </section>
 
     <section id="updates" class="panel reveal">
       <div class="panel-head">UPDATES — 軟體更新 <span class="right mono" id="updatedAt"></span></div>
@@ -699,14 +714,12 @@
     }else{ $$('.reveal').forEach(function(el){ el.classList.add('in'); }); }
   }
 
-  /* ---------- Install prompt ---------- */
-  var deferred = null;
-  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred = e; $('#installBtn').hidden = false; });
-  $('#installBtn').addEventListener('click', function(){
-    if(!deferred) return; deferred.prompt();
-    deferred.userChoice.finally(function(){ deferred = null; $('#installBtn').hidden = true; });
-  });
-  window.addEventListener('appinstalled', function(){ $('#installBtn').hidden = true; });
+  /* ---------- App 安裝區：非 Android 時改說明 ---------- */
+  if(!/Android/i.test(navigator.userAgent)){
+    $('#apkBtn').textContent = '請用 Android 手機開啟本頁下載';
+    $('#apkBtn').removeAttribute('href');
+    $('#apkBtn').style.opacity = '.6';
+  }
 
   window.addEventListener('online', function(){ setConn('', '連線正常'); });
   window.addEventListener('offline', function(){ setConn('off', '離線模式'); });
@@ -739,7 +752,8 @@
     });
 
   if('serviceWorker' in navigator){
-    window.addEventListener('load', function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); });
+    navigator.serviceWorker.getRegistrations().then(function(rs){ rs.forEach(function(r){ r.unregister(); }); }).catch(function(){});
+    if(window.caches){ caches.keys().then(function(ks){ ks.forEach(function(k){ caches.delete(k); }); }).catch(function(){}); }
   }
 })();
 </script>
