@@ -51,7 +51,7 @@
     color:var(--ink);
     font-family:'Noto Sans TC', sans-serif;
     -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
+    overflow-x:clip; /* 不能用 hidden：會讓 body 變成捲動容器，導致 sticky 導覽列失效 */
     max-width:100%;
   }
   .mono{ font-family:'IBM Plex Mono', monospace; }
