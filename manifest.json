@@ -3,7 +3,7 @@
   "name": "ASD 工作室",
   "short_name": "ASD工作室",
   "description": "Android 手機解鎖、Root、常用工具安裝服務 — 流程公開透明，買家隨時能查進度、找答案。",
-  "start_url": "/index.html",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "display_override": [

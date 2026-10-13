@@ -1,6 +1,6 @@
-const CACHE_NAME = 'asd-workshop-v5';
+const CACHE_NAME = 'asd-workshop-v6';
 const PRECACHE_URLS = [
-  '/index.html',
+  '/',
   '/toolkit.html',
   '/toolkit.json',
   '/icons/logo.png',
@@ -47,7 +47,7 @@ self.addEventListener('fetch', (event) => {
           }
           return response;
         })
-        .catch(() => caches.match(request).then((hit) => hit || caches.match('/index.html')))
+        .catch(() => caches.match(request).then((hit) => hit || caches.match('/')))
     );
     return;
   }
