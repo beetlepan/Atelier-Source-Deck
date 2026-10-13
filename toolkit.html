@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ASD 工具箱｜ASD 工作室</title>
-<meta name="description" content="ASD 工具箱：常用軟體最新版本、問題自助排除教學、交機後檢查清單，以及聯絡方式。">
+<meta name="description" content="ASD 工具箱：常用軟體最新版本、問題自助排除教學，以及聯絡方式。">
 <link rel="canonical" href="https://ateliersourcedeck.com/toolkit.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="ASD 工具箱｜ASD 工作室">
@@ -350,7 +350,6 @@
       <a href="index.html">← 首頁</a>
       <a href="#updates">軟體更新<span class="count" id="newCount" hidden></span></a>
       <a href="#guides">教學</a>
-      <a href="#checklist">交機檢查</a>
       <a href="#report">聯絡</a>
     </nav>
   </header>
@@ -360,7 +359,7 @@
     <section class="hero">
       <div class="eyebrow">ASD TOOLBOX — ASD 工具箱</div>
       <h1>更新、教學、聯絡，<br>都在這一頁。</h1>
-      <p>常用軟體的最新版本、遇到問題的逐步排除方式，和交機後的檢查清單。內容由工作室持續維護，加入主畫面後，離線也能查教學。</p>
+      <p>常用軟體的最新版本，和遇到問題的逐步排除方式。內容由工作室持續維護，加入主畫面後，離線也能查教學。</p>
       <div class="cta-row">
         <a class="btn primary" href="#updates">看軟體更新</a>
         <a class="btn" href="#guides">查教學</a>
@@ -403,31 +402,10 @@
       </div>
     </section>
 
-    <section id="checklist" class="panel reveal">
-      <div class="panel-head">CHECKLIST — 交機後檢查 <span class="right mono" id="checkCount"></span></div>
-      <div class="panel-body">
-        <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
-        <div id="checkList"></div>
-        <p style="font-size:12px; color:var(--muted); margin:14px 0 0;">勾選狀態只存在這支手機的瀏覽器裡，不會上傳。</p>
-      </div>
-    </section>
-
     <section id="report" class="panel reveal">
       <div class="panel-head">CONTACT — 聯絡我們</div>
       <div class="panel-body">
-        <p style="margin:0 0 16px; font-size:13.5px; color:var(--muted); line-height:1.75;">聯絡前請先看過「教學」，找不到答案再透過 Threads 或 Email 聯絡我們。填好下面幾格，下方的內容會即時整理好，複製後貼給我們，能省去來回確認的時間。機型與系統版本會盡量自動帶入，不準時請自行修改。</p>
-        <div class="form-grid">
-          <div class="field"><label for="fOrder">ORDER — 訂單編號</label><input id="fOrder" autocomplete="off" placeholder="例如 ASD-0001"></div>
-          <div class="field"><label for="fModel">MODEL — 手機機型</label><input id="fModel" autocomplete="off" placeholder="例如 Poco F5"></div>
-          <div class="field"><label for="fOs">SYSTEM — 系統版本</label><input id="fOs" autocomplete="off" placeholder="例如 Android 14 / HyperOS 1.0"></div>
-          <div class="field"><label for="fApp">APP — 出問題的 App（選填）</label><input id="fApp" autocomplete="off" placeholder="例如 某某銀行 App"></div>
-          <div class="field full"><label for="fDesc">ISSUE — 發生什麼事</label><textarea id="fDesc" placeholder="什麼時候開始、做了什麼操作、畫面顯示什麼訊息"></textarea></div>
-        </div>
-        <div class="console" id="reportPreview" style="min-height:0;" aria-label="回報內容預覽"></div>
-        <div class="report-actions">
-          <button class="btn primary" id="copyBtn" type="button">複製回報內容</button>
-          <a class="btn" id="mailBtn" href="#">用 Email 寄出</a>
-        </div>
+        <p style="margin:0 0 4px; font-size:13.5px; color:var(--muted); line-height:1.75;">先查過「教學」，找不到答案再透過 Threads 或 Email 聯絡我們。</p>
         <div class="contact-grid" id="contactGrid"></div>
         <p style="font-size:12px; color:var(--muted); margin:14px 0 0;">遇到畫面異常或磚機，請記得另外拍照或錄影，一起附上。</p>
       </div>
@@ -677,75 +655,12 @@
     if(el){ if(!el.classList.contains('open')) $('.guide-q', el).click(); setTimeout(function(){ el.scrollIntoView({ block: 'start' }); }, 50); }
   }
 
-  /* ---------- Render: checklist ---------- */
-  function renderChecklist(){
-    var saved = store('asd.toolkit.check.v1') || {};
-    var list = $('#checkList'); list.textContent = '';
-    function refresh(){
-      var n = DATA.checklist.filter(function(c){ return saved[c.id]; }).length, t = DATA.checklist.length;
-      $('#checkCount').textContent = n + ' / ' + t;
-      $('#progressBar').style.width = (t ? n / t * 100 : 0) + '%';
-    }
-    DATA.checklist.forEach(function(c){
-      var input = h('input', { type: 'checkbox', id: 'c-' + c.id });
-      input.checked = !!saved[c.id];
-      input.addEventListener('change', function(){ saved[c.id] = input.checked; store('asd.toolkit.check.v1', saved); refresh(); });
-      list.appendChild(h('label', { 'class': 'check' }, input, h('span', { 'class': 'box', 'aria-hidden': 'true', text: '✓' }), h('span', { 'class': 'txt', text: c.text })));
-    });
-    refresh();
-  }
-
-  /* ---------- Report ---------- */
-  var F = {};
-  function reportText(){
-    var lines = [
-      '【ASD 工作室 回報】',
-      '訂單編號：' + (F.order.value.trim() || '（未填）'),
-      '手機機型：' + (F.model.value.trim() || '（未填）'),
-      '系統版本：' + (F.os.value.trim() || '（未填）')
-    ];
-    if(F.app.value.trim()) lines.push('出問題的 App：' + F.app.value.trim());
-    lines.push('狀況描述：' + (F.desc.value.trim() || '（未填）'));
-    return lines.join('\n');
-  }
-  function updateReport(){
-    var t = reportText();
-    var pv = $('#reportPreview'); pv.textContent = '';
-    t.split('\n').forEach(function(l, i){ pv.appendChild(h('div', { 'class': 'ln' + (i === 0 ? ' dim' : ''), text: l })); });
-    var subject = 'ASD 回報' + (F.order.value.trim() ? ' ' + F.order.value.trim() : '');
-    $('#mailBtn').href = 'mailto:' + (DATA && DATA.contact && DATA.contact.email || 'ateliersourcedeck@gmail.com') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(t);
-    store('asd.toolkit.form.v1', { order: F.order.value, model: F.model.value, os: F.os.value });
-  }
-  function initReport(){
-    F = { order: $('#fOrder'), model: $('#fModel'), os: $('#fOs'), app: $('#fApp'), desc: $('#fDesc') };
-    var saved = store('asd.toolkit.form.v1') || {};
-    if(saved.order) F.order.value = saved.order;
-    if(saved.model) F.model.value = saved.model;
-    if(saved.os) F.os.value = saved.os;
-    detectDevice().then(function(d){
-      if(!F.model.value && d.model) F.model.value = d.model;
-      if(!F.os.value && d.os) F.os.value = d.os;
-      updateReport();
-      logLine('> 裝置：' + (d.model || '機型未偵測') + ' / ' + (d.os || '系統未偵測'), 'dim');
-    });
-    Object.keys(F).forEach(function(k){ F[k].addEventListener('input', updateReport); });
-    $('#copyBtn').addEventListener('click', function(){
-      var t = reportText();
-      function done(){ toast('已複製，貼給我們即可'); }
-      if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(t).then(done, fallback);
-      }else fallback();
-      function fallback(){
-        var ta = h('textarea', { style: 'position:fixed;opacity:0' }); ta.value = t; document.body.appendChild(ta); ta.select();
-        try{ document.execCommand('copy'); done(); }catch(e){ toast('請長按內容手動複製'); }
-        ta.remove();
-      }
-    });
+  /* ---------- Contact ---------- */
+  function initContact(){
     var c = DATA.contact || {}, grid = $('#contactGrid'); grid.textContent = '';
     function card(label, link){ if(!link) return; grid.appendChild(h('div', { 'class': 'contact-card' }, h('div', { 'class': 'label', text: label }), link)); }
     if(c.threads) card('Threads', linkBtn({ label: '@asdasdinx55', url: c.threads, primary: true }, 'small'));
     if(c.email) card('Email', h('a', { href: 'mailto:' + c.email, 'class': 'btn small', text: c.email }));
-    updateReport();
   }
 
   /* ---------- Search ---------- */
@@ -813,7 +728,7 @@
       if(data.updated) $('#updatedAt').textContent = '內容更新 ' + data.updated;
       if(data.memo){ $('#memoText').textContent = data.memo; $('#memo').hidden = false; }
       if(n){ var nc = $('#newCount'); nc.textContent = n; nc.hidden = false; }
-      renderChips(); renderUpdates(); renderGuides(); renderChecklist(); initReport(); initSearch(); initSpy();
+      renderChips(); renderUpdates(); renderGuides(); initContact(); initSearch(); initSpy();
       openGuideFromHash();
     })
     .catch(function(err){

@@ -566,24 +566,6 @@
       ]
     }
   ],
-  "checklist": [
-    {
-      "id": "ota-off",
-      "text": "已在設定內關閉系統自動更新（OTA 會清除 Root）"
-    },
-    {
-      "id": "order-no",
-      "text": "已記下訂單編號，方便隨時查進度"
-    },
-    {
-      "id": "bank-test",
-      "text": "銀行、薪資轉帳等 App 已實際開啟測試過"
-    },
-    {
-      "id": "know-report",
-      "text": "知道遇到問題要先看教學，找不到再透過 Threads 聯絡"
-    }
-  ],
   "contact": {
     "threads": "https://www.threads.com/@asdasdinx55",
     "email": "ateliersourcedeck@gmail.com"
