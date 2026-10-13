@@ -336,9 +336,8 @@
     .reveal{ opacity:1; transform:none; }
   }
 </style>
-<script>if(/ASDSiteApp/.test(navigator.userAgent))document.documentElement.classList.add('in-app');if(/[?&]view=guides/.test(location.search))document.documentElement.classList.add('guides-only');</script>
+<script>if(/[?&]view=guides/.test(location.search))document.documentElement.classList.add('guides-only');</script>
 <style>
-  .in-app #app, .in-app #appBtn{ display:none !important; }
   .guides-only .site-header, .guides-only .hero, .guides-only #memo, .guides-only #app, .guides-only #updates, .guides-only #report, .guides-only footer, .guides-only .panel[style*="margin-top:18px"]{ display:none !important; }
   .guides-only .toolbar{ margin-top:14px; }
 </style>
@@ -364,11 +363,10 @@
     <section class="hero">
       <div class="eyebrow">ASD TOOLBOX — ASD 工具箱</div>
       <h1>更新、教學、聯絡，<br>都在這一頁。</h1>
-      <p>常用軟體的最新版本，和遇到問題的逐步排除方式。內容由工作室持續維護。Android 手機可安裝 ASD 工具箱 App，直接在手機上查看。</p>
+      <p>常用軟體的最新版本，和遇到問題的逐步排除方式。內容由工作室持續維護。</p>
       <div class="cta-row">
         <a class="btn primary" href="#updates">看軟體更新</a>
         <a class="btn" href="#guides">查教學</a>
-        <a class="btn" id="appBtn" href="#app">安裝 ASD 工具箱 App</a>
       </div>
     </section>
 
@@ -391,27 +389,6 @@
         <button id="qClear" type="button" aria-label="清除搜尋" hidden>✕</button>
       </label>
     </div>
-
-    <section id="app" class="panel reveal">
-      <div class="eyebrow">APP — 安裝 App</div>
-      <h2 style="margin:6px 0 10px;">安裝 ASD App（Android）</h2>
-      <p id="appNote">有兩個各自獨立的 App，可依需要安裝，不需要透過瀏覽器開啟網站。目前僅支援 Android 手機；iPhone 請直接使用網頁。</p>
-      <div class="cta-row" style="margin:14px 0 6px;">
-        <a class="btn primary" id="apkBtn" href="https://github.com/beetlepan/asd-toolbox/releases/latest/download/ASD-Toolbox.apk">下載 ASD 工具箱（APK）</a>
-      </div>
-      <p style="margin:0 0 14px;font-size:13.5px;opacity:.8;">軟體版本偵測、教學、手機設定捷徑，並提醒哪些軟體可以更新。</p>
-      <div class="cta-row" style="margin:0 0 6px;">
-        <a class="btn" id="siteApkBtn" href="https://github.com/beetlepan/asd-site-app/releases/latest/download/ASD-Site.apk">下載 ASD 工作室官網（APK）</a>
-      </div>
-      <p style="margin:0 0 14px;font-size:13.5px;opacity:.8;">工作室介紹、服務條款與預約頁面。</p>
-      <ol style="padding-left:20px;line-height:1.9;">
-        <li>點上方按鈕下載 APK（瀏覽器若提示「這類檔案可能有害」，選「仍要下載」）。</li>
-        <li>下載完成後點開檔案；系統若提示「不允許安裝未知來源應用程式」，點「設定」，開啟該瀏覽器（或檔案管理員）的「允許安裝」。</li>
-        <li>返回後點「安裝」。若出現 Play 保護機制警告，選「仍要安裝」（App 為工作室自行發佈，不經 Play 商店）。</li>
-        <li>安裝完成後，從桌面開啟。工具箱的軟體版本與教學會自動更新，不需重裝。</li>
-      </ol>
-      <p style="opacity:.7;font-size:13px;">安裝完成後，可到手機設定關閉瀏覽器的「安裝未知來源」權限。</p>
-    </section>
 
     <section id="updates" class="panel reveal">
       <div class="panel-head">UPDATES — 軟體更新 <span class="right mono" id="updatedAt"></span></div>
@@ -723,14 +700,6 @@
       var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -8% 0px' });
       $$('.reveal').forEach(function(el){ io.observe(el); });
     }else{ $$('.reveal').forEach(function(el){ el.classList.add('in'); }); }
-  }
-
-  /* ---------- App 安裝區：非 Android 時改說明 ---------- */
-  if(!/Android/i.test(navigator.userAgent)){
-    ['#apkBtn','#siteApkBtn'].forEach(function(id){
-      var el = $(id); el.textContent = '請用 Android 手機開啟本頁下載';
-      el.removeAttribute('href'); el.style.opacity = '.6';
-    });
   }
 
   window.addEventListener('online', function(){ setConn('', '連線正常'); });
