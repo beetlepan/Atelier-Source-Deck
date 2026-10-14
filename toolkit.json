@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-10-13",
+  "updated": "2026-10-14",
   "memo": "歡迎使用 ASD工具箱。軟體版本與教學會持續更新，遇到問題請先查「教學」，找不到再透過社群聯絡我們。",
   "categories": [
     {
@@ -89,7 +89,7 @@
       "cat": "root",
       "name": "LSPosed",
       "author": "LSPosed.cn",
-      "version": "v2.2.0-7854",
+      "version": "v2.2.1-7912",
       "date": "",
       "stars": "",
       "desc": "Xposed 模組執行框架，用來執行各類系統模組（本工作室服務所使用的版本）。",
@@ -181,8 +181,8 @@
       "cat": "game",
       "name": "Pokémon GO（Play 商店原版）",
       "author": "Niantic, Inc.",
-      "version": "0.431.0",
-      "date": "2026-10-02",
+      "version": "0.433.0",
+      "date": "2026-10-09",
       "stars": "",
       "pkg": "com.nianticlabs.pokemongo",
       "desc": "Google Play 商店的原版 Pokémon GO。版本號取自 APKMirror，下載請到 Play 商店。",
