@@ -339,6 +339,8 @@
 <script>if(/[?&]view=guides/.test(location.search))document.documentElement.classList.add('guides-only');</script>
 <style>
   .guides-only .site-header, .guides-only .hero, .guides-only #memo, .guides-only #app, .guides-only #updates, .guides-only #report, .guides-only footer, .guides-only .panel[style*="margin-top:18px"]{ display:none !important; }
+  .guide-subhead{ margin:18px 4px 6px; }
+  .guide-subhead:first-child{ margin-top:4px; }
   .guides-only .toolbar{ margin-top:14px; }
 </style>
 </head>
@@ -401,6 +403,7 @@
     <section id="guides" class="panel reveal">
       <div class="panel-head">GUIDES — 問題自助排除 <span class="right mono" id="guideCount"></span></div>
       <div class="panel-body" style="padding:8px 12px 12px;">
+        <div class="chips" id="guideChips" role="group" aria-label="篩選教學分類" style="padding:6px 0 10px;"></div>
         <div id="guidesList"></div>
       </div>
     </section>
@@ -515,7 +518,7 @@
   }
 
   /* ---------- Render: updates ---------- */
-  var DATA = null, state = { cat: 'all', onlyNew: false, q: '' }, newIds = {};
+  var DATA = null, state = { cat: 'all', gcat: 'all', onlyNew: false, q: '' }, newIds = {};
 
   function stamp(u){ return (u.version || '') + '|' + (u.date || ''); }
   function computeNew(){
@@ -610,17 +613,45 @@
   }
 
   /* ---------- Render: guides ---------- */
+  var GUIDE_GROUPS = [
+    { id: 'game', label: '遊戲' },
+    { id: 'root', label: 'ROOT' }
+  ];
+  function guideCat(g){ return g.cat || (g.tag === '遊戲' ? 'game' : 'root'); }
+
+  function renderGuideChips(){
+    var box = $('#guideChips'); if(!box) return; box.textContent = '';
+    function chip(label, id){
+      box.appendChild(h('button', { 'class': 'chip', type: 'button', 'aria-pressed': state.gcat === id ? 'true' : 'false', text: label,
+        onclick: function(){ state.gcat = id; renderGuideChips(); renderGuides(); } }));
+    }
+    chip('全部', 'all');
+    GUIDE_GROUPS.forEach(function(c){ chip(c.label, c.id); });
+  }
+
   function renderGuides(){
     var list = $('#guidesList'); list.textContent = '';
-    var items = DATA.guides.filter(function(g){
+    var all = DATA.guides.filter(function(g){
       return matches([g.title, g.summary, g.tag, g.device || '', (g.steps || []).map(function(s){ return s.t + ' ' + s.d; }).join(' ')].join(' '));
     });
+    var items = all.filter(function(g){ return state.gcat === 'all' || guideCat(g) === state.gcat; });
     $('#guideCount').textContent = items.length + ' / ' + DATA.guides.length;
     if(!items.length){
       list.appendChild(h('div', { 'class': 'empty' }, h('span', { 'class': 'mono', text: '> no match' }), '沒有符合的教學。可以到「聯絡」整理資訊，直接聯絡我們。'));
       return;
     }
-    items.forEach(function(g){
+    var shown = 0;
+    GUIDE_GROUPS.forEach(function(grp){
+      var gi = items.filter(function(g){ return guideCat(g) === grp.id; });
+      if(!gi.length) return;
+      list.appendChild(h('div', { 'class': 'updates-subhead guide-subhead', text: grp.label + ' 問題（' + gi.length + '）' }));
+      gi.forEach(function(g){ shown++; list.appendChild(guideItem(g)); });
+    });
+    if(state.q && items.length <= 3){ var first = $('.guide', list); if(first) $('.guide-q', first).click(); }
+  }
+
+  function guideItem(g){
+    {
       var tags = h('div', { 'class': 'g-tags' }, h('span', { 'class': 'tag', text: g.tag }));
       if(g.device) tags.appendChild(h('span', { 'class': 'tag dev', text: g.device }));
 
@@ -647,9 +678,8 @@
           try{ history.replaceState(null, '', '#guide-' + g.id); }catch(e){}
         }
       });
-      list.appendChild(item);
-    });
-    if(state.q && items.length <= 3){ var first = $('.guide', list); if(first) $('.guide-q', first).click(); }
+      return item;
+    }
   }
 
   function openGuideFromHash(){
@@ -722,7 +752,7 @@
       if(data.updated) $('#updatedAt').textContent = '內容更新 ' + data.updated;
       if(data.memo){ $('#memoText').textContent = data.memo; $('#memo').hidden = false; }
       if(n){ var nc = $('#newCount'); nc.textContent = n; nc.hidden = false; }
-      renderChips(); renderUpdates(); renderGuides(); initContact(); initSearch(); initSpy();
+      renderChips(); renderGuideChips(); renderUpdates(); renderGuides(); initContact(); initSearch(); initSpy();
       openGuideFromHash();
     })
     .catch(function(err){
