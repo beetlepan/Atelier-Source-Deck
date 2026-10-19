@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-10-14",
+  "updated": "2026-10-19",
   "memo": "歡迎使用 ASD工具箱。軟體版本與教學會持續更新，遇到問題請先查「教學」，找不到再透過社群聯絡我們。",
   "categories": [
     {
@@ -18,9 +18,9 @@
       "cat": "root",
       "name": "KernelSU",
       "author": "tiann",
-      "version": "v3.3.0",
-      "date": "2026-08-28",
-      "stars": "19.1k",
+      "version": "v3.3.1",
+      "date": "2026-10-12",
+      "stars": "19.4k",
       "desc": "核心層級（Kernel-based）的 Root 解決方案，提供裝置 Root 權限的核心框架，是常用的 ROOT 底層元件之一。",
       "links": [
         {
@@ -42,9 +42,9 @@
       "cat": "root",
       "name": "SukiSU Ultra",
       "author": "ShirkNeko",
-      "version": "v4.1.3",
-      "date": "2026-09-01",
-      "stars": "6.5k",
+      "version": "v4.2.1",
+      "date": "2026-10-15",
+      "stars": "6.6k",
       "desc": "同樣是核心層級 Root 方案，KernelSU 的衍生分支，另外支援 KPM（核心模組）功能。",
       "links": [
         {
@@ -135,9 +135,9 @@
       "cat": "root",
       "name": "Integrity-Box",
       "author": "MeowDump",
-      "version": "v40",
-      "date": "2026-08-05",
-      "stars": "2.7k",
+      "version": "v45",
+      "date": "2026-10-17",
+      "stars": "2.8k",
       "desc": "Play Integrity 驗證與系統環境管理工具箱，可輔助檢查、調整裝置的完整性驗證狀態，適合搭配上方相容性套件一起排查問題。",
       "links": [
         {
@@ -384,9 +384,9 @@
       "cat": "root",
       "name": "Zygisk Next",
       "author": "LSPosed",
-      "version": "1.5.0",
-      "date": "",
-      "stars": "",
+      "version": "1.5.2",
+      "date": "2026-10-13",
+      "stars": "925",
       "desc": "Magisk / KernelSU 的 Zygisk 實作模組，部分模組與隱藏方案會用到。這是 Root 模組，下載後要在 Root 管理器內「從儲存空間安裝」。",
       "links": [
         {
