@@ -181,8 +181,8 @@
       "cat": "game",
       "name": "Pokémon GO（Play 商店原版）",
       "author": "Niantic, Inc.",
-      "version": "0.433.0",
-      "date": "2026-10-09",
+      "version": "0.433.1",
+      "date": "2026-10-16",
       "stars": "",
       "pkg": "com.nianticlabs.pokemongo",
       "desc": "Google Play 商店的原版 Pokémon GO。版本號取自 APKMirror，下載請到 Play 商店。",
@@ -200,8 +200,8 @@
       "cat": "game",
       "name": "Pokémon GO（三星 Galaxy Store 版）",
       "author": "Niantic, Inc.",
-      "version": "0.431.0",
-      "date": "2026-10-01",
+      "version": "0.433.1",
+      "date": "2026-10-19",
       "stars": "",
       "desc": "三星 Galaxy Store 發行的 Pokémon GO 版本，搭配下方的 Galaxy Store 使用。",
       "links": [
@@ -258,7 +258,7 @@
       "cat": "game",
       "name": "Pokemod",
       "author": "pokemod.dev",
-      "version": "13.8.0",
+      "version": "13.8.3",
       "date": "",
       "stars": "",
       "desc": "修改版遊戲客戶端，提供完美投擲、自動捉寶可夢、異色雷達等強化功能，需 Root 裝置。",
@@ -302,7 +302,7 @@
       "cat": "game",
       "name": "PolygonX",
       "author": "Evermore Labs",
-      "version": "0.36.1",
+      "version": "0.37.0",
       "date": "",
       "stars": "",
       "pkg": "com.evermorelabs.polygonx",
@@ -311,7 +311,7 @@
       "links": [
         {
           "label": "下載 APK",
-          "url": "https://polygonx.dl.assets.evermorelabs.io/apk/com.evermorelabs.polygonx-0.36.1.apk",
+          "url": "https://polygonx.dl.assets.evermorelabs.io/apk/com.evermorelabs.polygonx-0.37.0.apk",
           "primary": true,
           "linkType": "apk-direct"
         }
