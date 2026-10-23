@@ -112,14 +112,14 @@
       "cat": "root",
       "name": "Play Integrity Fix",
       "author": "KOWX712",
-      "version": "v4.8",
-      "date": "2026-10-12",
+      "version": "v4.9",
+      "date": "2026-10-15",
       "stars": "4.1k",
       "desc": "修正 Google Play 完整性驗證結果，改善 Root 後銀行、遊戲等對裝置驗證較嚴格的 App 相容性。",
       "links": [
         {
           "label": "下載",
-          "url": "https://github.com/KOWX712/PlayIntegrityFix/releases/tag/v4.8-inject-s",
+          "url": "https://github.com/KOWX712/PlayIntegrityFix/releases/tag/v4.9-inject-s",
           "primary": true,
           "linkType": "module-zip"
         },
@@ -181,8 +181,8 @@
       "cat": "game",
       "name": "Pokémon GO（Play 商店原版）",
       "author": "Niantic, Inc.",
-      "version": "0.433.0",
-      "date": "2026-10-09",
+      "version": "0.433.1",
+      "date": "2026-10-08",
       "stars": "",
       "pkg": "com.nianticlabs.pokemongo",
       "desc": "Google Play 商店的原版 Pokémon GO。版本號取自 APKMirror，下載請到 Play 商店。",
@@ -258,7 +258,7 @@
       "cat": "game",
       "name": "Pokemod",
       "author": "pokemod.dev",
-      "version": "13.8.0",
+      "version": "13.8.3",
       "date": "",
       "stars": "",
       "desc": "修改版遊戲客戶端，提供完美投擲、自動捉寶可夢、異色雷達等強化功能，需 Root 裝置。",
@@ -302,7 +302,7 @@
       "cat": "game",
       "name": "PolygonX",
       "author": "Evermore Labs",
-      "version": "0.36.1",
+      "version": "0.37.3",
       "date": "",
       "stars": "",
       "pkg": "com.evermorelabs.polygonx",
@@ -311,7 +311,7 @@
       "links": [
         {
           "label": "下載 APK",
-          "url": "https://polygonx.dl.assets.evermorelabs.io/apk/com.evermorelabs.polygonx-0.36.1.apk",
+          "url": "https://polygonx.dl.assets.evermorelabs.io/apk/com.evermorelabs.polygonx-0.37.3.apk",
           "primary": true,
           "linkType": "apk-direct"
         }
