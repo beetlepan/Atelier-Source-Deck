@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-10-26",
+  "updated": "2026-10-27",
   "memo": "歡迎使用 ASD工具箱。軟體版本與教學會持續更新，遇到問題請先查「教學」，找不到再透過社群聯絡我們。",
   "categories": [
     {
@@ -65,8 +65,8 @@
       "cat": "root",
       "name": "Magisk",
       "author": "topjohnwu",
-      "version": "v30.7",
-      "date": "2026-02-23",
+      "version": "v31.1",
+      "date": "2026-10-25",
       "stars": "63.5k",
       "desc": "最經典的 Root 工具之一，透過系統層修改實現免動分割區的 Root 方式，生態系與模組最完整。",
       "links": [
