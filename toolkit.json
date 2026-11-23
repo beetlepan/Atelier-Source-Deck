@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-16",
+  "updated": "2026-11-23",
   "memo": "歡迎使用 ASD工具箱。軟體版本與教學會持續更新，遇到問題請先查「教學」，找不到再透過社群聯絡我們。",
   "categories": [
     {
@@ -20,7 +20,7 @@
       "author": "tiann",
       "version": "v3.3.1",
       "date": "2026-10-12",
-      "stars": "20.6k",
+      "stars": "20.9k",
       "desc": "核心層級（Kernel-based）的 Root 解決方案，提供裝置 Root 權限的核心框架，是常用的 ROOT 底層元件之一。",
       "links": [
         {
@@ -67,7 +67,7 @@
       "author": "topjohnwu",
       "version": "v31.1",
       "date": "2026-10-25",
-      "stars": "64.0k",
+      "stars": "64.2k",
       "desc": "最經典的 Root 工具之一，透過系統層修改實現免動分割區的 Root 方式，生態系與模組最完整。",
       "links": [
         {
